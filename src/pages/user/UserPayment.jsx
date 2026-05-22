@@ -21,7 +21,7 @@ const UserPayment = ({ course, userId, onClose }) => {
 
   // ================= NUMBERS =================
   const paymentNumber = "03204606482";
-  const whatsappNumber = "+92 300 1234567";
+  const whatsappNumber = "+92 320 4606482";
 
   // ================= SUBMIT =================
   const submitPayment = async () => {
