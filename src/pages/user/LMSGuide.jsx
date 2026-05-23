@@ -17,7 +17,7 @@ const LMSGuide = () => {
 
   // ================= NUMBERS =================
   const paymentNumber = "03204606482";      // JazzCash / EasyPaisa
-  const whatsappNumber = "03111222333";     // WhatsApp slip submission
+  const whatsappNumber = "03204606482";     // WhatsApp slip submission
 
   return (
     <div className="min-h-screen bg-zinc-100">
