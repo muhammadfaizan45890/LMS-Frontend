@@ -154,7 +154,7 @@ const Login = () => {
                         ) : "Login"}
                     </Button>
 
-                    {/* <p className="text-center text-gray-600 text-sm">
+                    <p className="text-center text-gray-600 text-sm">
                         Don't have an account?{" "}
                         <span
                             className="text-black font-medium cursor-pointer hover:underline"
@@ -162,7 +162,7 @@ const Login = () => {
                         >
                             Sign Up
                         </span>
-                    </p> */}
+                    </p> 
                 </CardFooter>
             </Card>
         </div>
