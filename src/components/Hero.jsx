@@ -16,6 +16,8 @@ import { Button } from "./ui/button";
 import { useNavigate } from "react-router-dom";
 import { getData } from "@/context/userContext";
 
+
+const Hero = () => {
 const handleGetStarted = () => {
   if (!user) {
     navigate("/login");
@@ -24,7 +26,7 @@ const handleGetStarted = () => {
   }
 };
 
-const Hero = () => {
+  
   const { user } = getData();
   const navigate = useNavigate();
 
@@ -231,7 +233,7 @@ const Hero = () => {
                 }}
               >
                 <Button
-  onClick={handleGetStarted}
+                  onClick={handleGetStarted}
                   size="lg"
                   className="
                     h-14 px-8 rounded-2xl
