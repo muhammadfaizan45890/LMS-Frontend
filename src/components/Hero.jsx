@@ -16,6 +16,14 @@ import { Button } from "./ui/button";
 import { useNavigate } from "react-router-dom";
 import { getData } from "@/context/userContext";
 
+const handleGetStarted = () => {
+  if (!user) {
+    navigate("/login");
+  } else {
+    navigate("/user/dashboard");
+  }
+};
+
 const Hero = () => {
   const { user } = getData();
   const navigate = useNavigate();
@@ -223,7 +231,7 @@ const Hero = () => {
                 }}
               >
                 <Button
-                  onClick={() => navigate("/create-todo")}
+  onClick={handleGetStarted}
                   size="lg"
                   className="
                     h-14 px-8 rounded-2xl
