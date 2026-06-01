@@ -10,28 +10,32 @@ import {
 
 import React from "react";
 // eslint-disable-next-line no-unused-vars
+import { motion } from "framer-motion";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { useNavigate } from "react-router-dom";
 import { getData } from "@/context/userContext";
 
 const Hero = () => {
-
   const { user } = getData();
   const navigate = useNavigate();
 
-  // ================= GET STARTED =================
-  const handleGetStarted = () => {
+  // ================= ANIMATIONS =================
+  const fadeUp = {
+    hidden: {
+      opacity: 0,
+      y: 40,
+    },
 
-    // USER NOT LOGGED IN
-    if (!user) {
-      navigate("/login");
-    }
+    visible: (delay = 0) => ({
+      opacity: 1,
+      y: 0,
 
-    // USER LOGGED IN
-    else {
-      navigate("/user/dashboard");
-    }
+      transition: {
+        duration: 0.8,
+        delay,
+      },
+    }),
   };
 
   return (
@@ -40,11 +44,41 @@ const Hero = () => {
       {/* ================= BACKGROUND EFFECTS ================= */}
       <div className="absolute inset-0 overflow-hidden">
 
-        <div className="absolute top-[-100px] left-[-100px] w-[350px] h-[350px] bg-zinc-200 rounded-full blur-[120px]" />
+        <motion.div
+          animate={{
+            scale: [1, 1.1, 1],
+            opacity: [0.4, 0.6, 0.4],
+          }}
+          transition={{
+            duration: 6,
+            repeat: Infinity,
+          }}
+          className="absolute top-[-100px] left-[-100px] w-[350px] h-[350px] bg-zinc-200 rounded-full blur-[120px]"
+        />
 
-        <div className="absolute bottom-[-120px] right-[-100px] w-[400px] h-[400px] bg-zinc-300 rounded-full blur-[140px]" />
+        <motion.div
+          animate={{
+            scale: [1, 1.15, 1],
+            opacity: [0.4, 0.6, 0.4],
+          }}
+          transition={{
+            duration: 7,
+            repeat: Infinity,
+          }}
+          className="absolute bottom-[-120px] right-[-100px] w-[400px] h-[400px] bg-zinc-300 rounded-full blur-[140px]"
+        />
 
-       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-zinc-100 rounded-full blur-[150px] opacity-70" />
+        <motion.div
+          animate={{
+            rotate: [0, 360],
+          }}
+          transition={{
+            duration: 40,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-zinc-100 rounded-full blur-[150px] opacity-70"
+        />
 
       </div>
 
@@ -54,12 +88,24 @@ const Hero = () => {
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
 
           {/* ================= LEFT CONTENT ================= */}
-         <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={fadeUp}
+            className="flex flex-col items-center lg:items-start text-center lg:text-left"
+          >
 
             {/* USER INFO */}
             {user && (
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mb-8">
-                <div
+              <motion.div
+                custom={0.1}
+                variants={fadeUp}
+                initial="hidden"
+                animate="visible"
+                className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mb-8"
+              >
+
+                <motion.div
                   whileHover={{
                     scale: 1.03,
                   }}
@@ -80,19 +126,31 @@ const Hero = () => {
                     </h3>
                   </div>
 
-                </div>
+                </motion.div>
 
-                <div className="flex items-center gap-3 bg-white border border-zinc-200 shadow-sm rounded-full px-5 py-2">
+                <motion.div
+                  whileHover={{
+                    scale: 1.05,
+                  }}
+                  className={`
+                    px-4 py-2 rounded-full text-xs font-bold tracking-widest shadow-sm border
+                    ${
+                      user.role === "admin"
+                        ? "bg-black text-white border-black"
+                        : "bg-zinc-100 text-black border-zinc-200"
+                    }
+                  `}
+                >
                   {user.role === "admin"
                     ? "ADMIN ACCESS"
                     : "STUDENT ACCESS"}
-                </div>
+                </motion.div>
 
-              </div>
+              </motion.div>
             )}
 
             {/* BADGE */}
-            <div
+            <motion.div
               custom={0.2}
               variants={fadeUp}
               initial="hidden"
@@ -102,10 +160,10 @@ const Hero = () => {
                 <Sparkles className="w-4 h-4 mr-2 animate-pulse" />
                 AI Powered Learning Platform
               </Badge>
-            </div>
+            </motion.div>
 
             {/* HEADING */}
-            <h1
+            <motion.h1
               custom={0.3}
               variants={fadeUp}
               initial="hidden"
@@ -115,7 +173,7 @@ const Hero = () => {
 
               Intelligent Learning
 
-              <span
+              <motion.span
                 animate={{
                   opacity: [0.5, 1, 0.5],
                 }}
@@ -126,12 +184,12 @@ const Hero = () => {
                 className="block text-zinc-400 mt-2"
               >
                 Designed For The Future
-              </span>
+              </motion.span>
 
-            </h1>
+            </motion.h1>
 
             {/* DESCRIPTION */}
-            <p
+            <motion.p
               custom={0.4}
               variants={fadeUp}
               initial="hidden"
@@ -144,10 +202,10 @@ const Hero = () => {
               content with a beautiful and responsive interface designed
               for productivity and growth.
 
-            </p>
+            </motion.p>
 
             {/* BUTTONS */}
-            <div
+            <motion.div
               custom={0.5}
               variants={fadeUp}
               initial="hidden"
@@ -155,7 +213,7 @@ const Hero = () => {
               className="flex flex-col sm:flex-row gap-4 mt-10 w-full sm:w-auto"
             >
 
-              <div
+              <motion.div
                 whileHover={{
                   scale: 1.05,
                 }}
@@ -165,7 +223,7 @@ const Hero = () => {
                 }}
               >
                 <Button
-                  onClick={handleGetStarted}
+                  onClick={() => navigate("/create-todo")}
                   size="lg"
                   className="
                     h-14 px-8 rounded-2xl
@@ -178,7 +236,7 @@ const Hero = () => {
                 >
                   Get Started
 
-                  <div
+                  <motion.div
                     animate={{
                       x: [0, 5, 0],
                     }}
@@ -188,12 +246,12 @@ const Hero = () => {
                     }}
                   >
                     <ArrowRight className="ml-2 h-5 w-5" />
-                  </div>
+                  </motion.div>
 
                 </Button>
-              </div>
+              </motion.div>
 
-              <div
+              <motion.div
                 whileHover={{
                   scale: 1.05,
                 }}
@@ -214,7 +272,7 @@ const Hero = () => {
                     text-base font-semibold
                   "
                 >
-                  <div
+                  <motion.div
                     animate={{
                       rotate: [0, 10, -10, 0],
                     }}
@@ -224,16 +282,16 @@ const Hero = () => {
                     }}
                   >
                     <BrainCircuit className="mr-2 h-5 w-5" />
-                  </div>
+                  </motion.div>
 
                   Explore AI
                 </Button>
-              </div>
+              </motion.div>
 
-            </div>
+            </motion.div>
 
             {/* TRUST LINE */}
-            <div
+            <motion.div
               custom={0.6}
               variants={fadeUp}
               initial="hidden"
@@ -241,36 +299,36 @@ const Hero = () => {
               className="flex flex-wrap items-center justify-center lg:justify-start gap-6 mt-10 text-sm text-zinc-500"
             >
 
-              <div
+              <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="flex items-center gap-2"
               >
                 <ShieldCheck size={18} />
                 Secure Platform
-              </div>
+              </motion.div>
 
-              <div
+              <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="flex items-center gap-2"
               >
                 <Zap size={18} />
                 Fast Performance
-              </div>
+              </motion.div>
 
-              <div
+              <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="flex items-center gap-2"
               >
                 <Star size={18} />
                 Modern Experience
-              </div>
+              </motion.div>
 
-            </div>
+            </motion.div>
 
-          </div>
+          </motion.div>
 
           {/* ================= RIGHT SIDE ================= */}
-          <div
+          <motion.div
             initial={{
               opacity: 0,
               x: 80,
@@ -289,7 +347,7 @@ const Hero = () => {
           >
 
             {/* FLOATING EFFECT */}
-            <div
+            <motion.div
               animate={{
                 y: [0, -15, 0],
               }}
@@ -335,7 +393,7 @@ const Hero = () => {
                     </p>
                   </div>
 
-                  <div
+                  <motion.div
                     animate={{
                       rotate: [0, 10, -10, 0],
                     }}
@@ -346,7 +404,7 @@ const Hero = () => {
                     className="w-16 h-16 rounded-2xl bg-black text-white flex items-center justify-center shadow-lg"
                   >
                     <BrainCircuit size={32} />
-                  </div>
+                  </motion.div>
 
                 </div>
 
@@ -354,7 +412,7 @@ const Hero = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
 
                   {/* CARD */}
-                  <div
+                  <motion.div
                     whileHover={{
                       y: -8,
                       scale: 1.02,
@@ -374,10 +432,10 @@ const Hero = () => {
                       Watch secure lectures with advanced controls.
                     </p>
 
-                  </div>
+                  </motion.div>
 
                   {/* CARD */}
-                  <div
+                  <motion.div
                     whileHover={{
                       y: -8,
                       scale: 1.02,
@@ -397,10 +455,10 @@ const Hero = () => {
                       Protected learning environment with role access.
                     </p>
 
-                  </div>
+                  </motion.div>
 
                   {/* CARD */}
-                  <div
+                  <motion.div
                     whileHover={{
                       scale: 1.01,
                     }}
@@ -414,7 +472,7 @@ const Hero = () => {
                           Platform Status
                         </p>
 
-                        <h2
+                        <motion.h2
                           animate={{
                             opacity: [0.7, 1, 0.7],
                           }}
@@ -425,10 +483,10 @@ const Hero = () => {
                           className="text-4xl font-black mt-2"
                         >
                           Active & Ready
-                        </h2>
+                        </motion.h2>
                       </div>
 
-                      <div
+                      <motion.div
                         animate={{
                           scale: [1, 1.05, 1],
                         }}
@@ -439,19 +497,19 @@ const Hero = () => {
                         className="bg-white text-black px-6 py-3 rounded-2xl font-bold w-fit"
                       >
                         AI Enabled
-                      </div>
+                      </motion.div>
 
                     </div>
 
-                  </div>
+                  </motion.div>
 
                 </div>
 
               </div>
 
-            </div>
+            </motion.div>
 
-          </div>
+          </motion.div>
 
         </div>
 
