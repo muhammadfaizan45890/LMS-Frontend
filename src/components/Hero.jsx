@@ -418,7 +418,7 @@ const Hero = () => {
                     className="w-16 h-16 rounded-2xl bg-black text-white flex items-center justify-center shadow-lg"
                   >
                     <BrainCircuit size={32} />
-                  </motion.div>
+                  </div>
 
                 </div>
 
