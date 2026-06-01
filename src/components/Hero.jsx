@@ -40,17 +40,7 @@ const Hero = () => {
       {/* ================= BACKGROUND EFFECTS ================= */}
       <div className="absolute inset-0 overflow-hidden">
 
-        <div
-          animate={{
-            scale: [1, 1.1, 1],
-            opacity: [0.4, 0.6, 0.4],
-          }}
-          transition={{
-            duration: 6,
-            repeat: Infinity,
-          }}
-          className="absolute top-[-100px] left-[-100px] w-[350px] h-[350px] bg-zinc-200 rounded-full blur-[120px]"
-        />
+        <div className="absolute top-[-100px] left-[-100px] w-[350px] h-[350px] bg-zinc-200 rounded-full blur-[120px]" />
 
         <div
           animate={{
