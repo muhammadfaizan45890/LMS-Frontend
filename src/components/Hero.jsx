@@ -42,29 +42,9 @@ const Hero = () => {
 
         <div className="absolute top-[-100px] left-[-100px] w-[350px] h-[350px] bg-zinc-200 rounded-full blur-[120px]" />
 
-        <div
-          animate={{
-            scale: [1, 1.15, 1],
-            opacity: [0.4, 0.6, 0.4],
-          }}
-          transition={{
-            duration: 7,
-            repeat: Infinity,
-          }}
-          className="absolute bottom-[-120px] right-[-100px] w-[400px] h-[400px] bg-zinc-300 rounded-full blur-[140px]"
-        />
+        <div className="absolute bottom-[-120px] right-[-100px] w-[400px] h-[400px] bg-zinc-300 rounded-full blur-[140px]" />
 
-        <div
-          animate={{
-            rotate: [0, 360],
-          }}
-          transition={{
-            duration: 40,
-            repeat: Infinity,
-            ease: "linear",
-          }}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-zinc-100 rounded-full blur-[150px] opacity-70"
-        />
+       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-zinc-100 rounded-full blur-[150px] opacity-70" />
 
       </div>
 
@@ -74,23 +54,11 @@ const Hero = () => {
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
 
           {/* ================= LEFT CONTENT ================= */}
-          <div
-            initial="hidden"
-            animate="visible"
-            variants={fadeUp}
-            className="flex flex-col items-center lg:items-start text-center lg:text-left"
-          >
+         <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
 
             {/* USER INFO */}
             {user && (
-              <div
-                custom={0.1}
-                variants={fadeUp}
-                initial="hidden"
-                animate="visible"
-                className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mb-8"
-              >
-
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mb-8">
                 <div
                   whileHover={{
                     scale: 1.03,
@@ -114,19 +82,7 @@ const Hero = () => {
 
                 </div>
 
-                <div
-                  whileHover={{
-                    scale: 1.05,
-                  }}
-                  className={`
-                    px-4 py-2 rounded-full text-xs font-bold tracking-widest shadow-sm border
-                    ${
-                      user.role === "admin"
-                        ? "bg-black text-white border-black"
-                        : "bg-zinc-100 text-black border-zinc-200"
-                    }
-                  `}
-                >
+                <div className="flex items-center gap-3 bg-white border border-zinc-200 shadow-sm rounded-full px-5 py-2">
                   {user.role === "admin"
                     ? "ADMIN ACCESS"
                     : "STUDENT ACCESS"}
