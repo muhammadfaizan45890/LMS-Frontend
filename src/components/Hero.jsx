@@ -10,7 +10,6 @@ import {
 
 import React from "react";
 // eslint-disable-next-line no-unused-vars
-import { motion } from "framer-motion";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { useNavigate } from "react-router-dom";
@@ -59,7 +58,7 @@ const Hero = () => {
       {/* ================= BACKGROUND EFFECTS ================= */}
       <div className="absolute inset-0 overflow-hidden">
 
-        <motion.div
+        <div
           animate={{
             scale: [1, 1.1, 1],
             opacity: [0.4, 0.6, 0.4],
@@ -71,7 +70,7 @@ const Hero = () => {
           className="absolute top-[-100px] left-[-100px] w-[350px] h-[350px] bg-zinc-200 rounded-full blur-[120px]"
         />
 
-        <motion.div
+        <div
           animate={{
             scale: [1, 1.15, 1],
             opacity: [0.4, 0.6, 0.4],
@@ -83,7 +82,7 @@ const Hero = () => {
           className="absolute bottom-[-120px] right-[-100px] w-[400px] h-[400px] bg-zinc-300 rounded-full blur-[140px]"
         />
 
-        <motion.div
+        <div
           animate={{
             rotate: [0, 360],
           }}
@@ -103,7 +102,7 @@ const Hero = () => {
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
 
           {/* ================= LEFT CONTENT ================= */}
-          <motion.div
+          <div
             initial="hidden"
             animate="visible"
             variants={fadeUp}
@@ -112,7 +111,7 @@ const Hero = () => {
 
             {/* USER INFO */}
             {user && (
-              <motion.div
+              <div
                 custom={0.1}
                 variants={fadeUp}
                 initial="hidden"
@@ -120,7 +119,7 @@ const Hero = () => {
                 className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mb-8"
               >
 
-                <motion.div
+                <div
                   whileHover={{
                     scale: 1.03,
                   }}
@@ -141,9 +140,9 @@ const Hero = () => {
                     </h3>
                   </div>
 
-                </motion.div>
+                </div>
 
-                <motion.div
+                <div
                   whileHover={{
                     scale: 1.05,
                   }}
@@ -159,13 +158,13 @@ const Hero = () => {
                   {user.role === "admin"
                     ? "ADMIN ACCESS"
                     : "STUDENT ACCESS"}
-                </motion.div>
+                </div>
 
-              </motion.div>
+              </div>
             )}
 
             {/* BADGE */}
-            <motion.div
+            <div
               custom={0.2}
               variants={fadeUp}
               initial="hidden"
@@ -175,10 +174,10 @@ const Hero = () => {
                 <Sparkles className="w-4 h-4 mr-2 animate-pulse" />
                 AI Powered Learning Platform
               </Badge>
-            </motion.div>
+            </div>
 
             {/* HEADING */}
-            <motion.h1
+            <h1
               custom={0.3}
               variants={fadeUp}
               initial="hidden"
@@ -188,7 +187,7 @@ const Hero = () => {
 
               Intelligent Learning
 
-              <motion.span
+              <span
                 animate={{
                   opacity: [0.5, 1, 0.5],
                 }}
@@ -199,12 +198,12 @@ const Hero = () => {
                 className="block text-zinc-400 mt-2"
               >
                 Designed For The Future
-              </motion.span>
+              </span>
 
-            </motion.h1>
+            </h1>
 
             {/* DESCRIPTION */}
-            <motion.p
+            <p
               custom={0.4}
               variants={fadeUp}
               initial="hidden"
@@ -217,10 +216,10 @@ const Hero = () => {
               content with a beautiful and responsive interface designed
               for productivity and growth.
 
-            </motion.p>
+            </p>
 
             {/* BUTTONS */}
-            <motion.div
+            <div
               custom={0.5}
               variants={fadeUp}
               initial="hidden"
@@ -228,7 +227,7 @@ const Hero = () => {
               className="flex flex-col sm:flex-row gap-4 mt-10 w-full sm:w-auto"
             >
 
-              <motion.div
+              <div
                 whileHover={{
                   scale: 1.05,
                 }}
@@ -251,7 +250,7 @@ const Hero = () => {
                 >
                   Get Started
 
-                  <motion.div
+                  <div
                     animate={{
                       x: [0, 5, 0],
                     }}
@@ -261,12 +260,12 @@ const Hero = () => {
                     }}
                   >
                     <ArrowRight className="ml-2 h-5 w-5" />
-                  </motion.div>
+                  </div>
 
                 </Button>
-              </motion.div>
+              </div>
 
-              <motion.div
+              <div
                 whileHover={{
                   scale: 1.05,
                 }}
@@ -287,7 +286,7 @@ const Hero = () => {
                     text-base font-semibold
                   "
                 >
-                  <motion.div
+                  <div
                     animate={{
                       rotate: [0, 10, -10, 0],
                     }}
@@ -297,16 +296,16 @@ const Hero = () => {
                     }}
                   >
                     <BrainCircuit className="mr-2 h-5 w-5" />
-                  </motion.div>
+                  </div>
 
                   Explore AI
                 </Button>
-              </motion.div>
+              </div>
 
-            </motion.div>
+            </div>
 
             {/* TRUST LINE */}
-            <motion.div
+            <div
               custom={0.6}
               variants={fadeUp}
               initial="hidden"
@@ -314,36 +313,36 @@ const Hero = () => {
               className="flex flex-wrap items-center justify-center lg:justify-start gap-6 mt-10 text-sm text-zinc-500"
             >
 
-              <motion.div
+              <div
                 whileHover={{ scale: 1.05 }}
                 className="flex items-center gap-2"
               >
                 <ShieldCheck size={18} />
                 Secure Platform
-              </motion.div>
+              </div>
 
-              <motion.div
+              <div
                 whileHover={{ scale: 1.05 }}
                 className="flex items-center gap-2"
               >
                 <Zap size={18} />
                 Fast Performance
-              </motion.div>
+              </div>
 
-              <motion.div
+              <div
                 whileHover={{ scale: 1.05 }}
                 className="flex items-center gap-2"
               >
                 <Star size={18} />
                 Modern Experience
-              </motion.div>
+              </div>
 
-            </motion.div>
+            </div>
 
-          </motion.div>
+          </div>
 
           {/* ================= RIGHT SIDE ================= */}
-          <motion.div
+          <div
             initial={{
               opacity: 0,
               x: 80,
@@ -362,7 +361,7 @@ const Hero = () => {
           >
 
             {/* FLOATING EFFECT */}
-            <motion.div
+            <div
               animate={{
                 y: [0, -15, 0],
               }}
@@ -408,7 +407,7 @@ const Hero = () => {
                     </p>
                   </div>
 
-                  <motion.div
+                  <div
                     animate={{
                       rotate: [0, 10, -10, 0],
                     }}
@@ -427,7 +426,7 @@ const Hero = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
 
                   {/* CARD */}
-                  <motion.div
+                  <div
                     whileHover={{
                       y: -8,
                       scale: 1.02,
@@ -447,10 +446,10 @@ const Hero = () => {
                       Watch secure lectures with advanced controls.
                     </p>
 
-                  </motion.div>
+                  </div>
 
                   {/* CARD */}
-                  <motion.div
+                  <div
                     whileHover={{
                       y: -8,
                       scale: 1.02,
@@ -470,10 +469,10 @@ const Hero = () => {
                       Protected learning environment with role access.
                     </p>
 
-                  </motion.div>
+                  </div>
 
                   {/* CARD */}
-                  <motion.div
+                  <div
                     whileHover={{
                       scale: 1.01,
                     }}
@@ -487,7 +486,7 @@ const Hero = () => {
                           Platform Status
                         </p>
 
-                        <motion.h2
+                        <h2
                           animate={{
                             opacity: [0.7, 1, 0.7],
                           }}
@@ -498,10 +497,10 @@ const Hero = () => {
                           className="text-4xl font-black mt-2"
                         >
                           Active & Ready
-                        </motion.h2>
+                        </h2>
                       </div>
 
-                      <motion.div
+                      <div
                         animate={{
                           scale: [1, 1.05, 1],
                         }}
@@ -512,19 +511,19 @@ const Hero = () => {
                         className="bg-white text-black px-6 py-3 rounded-2xl font-bold w-fit"
                       >
                         AI Enabled
-                      </motion.div>
+                      </div>
 
                     </div>
 
-                  </motion.div>
+                  </div>
 
                 </div>
 
               </div>
 
-            </motion.div>
+            </div>
 
-          </motion.div>
+          </div>
 
         </div>
 
