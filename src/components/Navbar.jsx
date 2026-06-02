@@ -556,11 +556,7 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const [notifications, setNotifications] = useState(3)
-  const [notificationList, setNotificationList] = useState([
-    { id: 1, title: "New course available!", time: "2 min ago", read: false },
-    { id: 2, title: "Your assignment is graded", time: "1 hour ago", read: false },
-    { id: 3, title: "Live session starting soon", time: "3 hours ago", read: false },
-  ])
+  const [notificationList, setNotificationList] = useState(0)
 
   // ================= CHECK CURRENT PANEL =================
   const isAdminPanel = location.pathname.startsWith("/admin")
