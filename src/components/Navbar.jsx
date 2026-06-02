@@ -504,7 +504,7 @@
 
 
 import React, { useEffect, useState } from 'react'
-import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 import {
   BookA,
@@ -519,10 +519,10 @@ import {
   Settings,
   HelpCircle,
   Bell,
-  Sun,
-  Moon,
   Shield,
-  Sparkles
+  Sparkles,
+  Trophy,
+  Clock
 } from 'lucide-react'
 
 import API from "../utils/api"
@@ -556,9 +556,12 @@ const Navbar = () => {
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
-  const [isDarkMode, setIsDarkMode] = useState(false)
   const [notifications, setNotifications] = useState(3)
-  const [activeDropdown, setActiveDropdown] = useState(null)
+  const [notificationList, setNotificationList] = useState([
+    { id: 1, title: "New course available!", time: "2 min ago", read: false },
+    { id: 2, title: "Your assignment is graded", time: "1 hour ago", read: false },
+    { id: 3, title: "Live session starting soon", time: "3 hours ago", read: false },
+  ])
 
   // ================= CHECK CURRENT PANEL =================
   const isAdminPanel = location.pathname.startsWith("/admin")
@@ -579,26 +582,6 @@ const Navbar = () => {
   useEffect(() => {
     setIsMobileMenuOpen(false)
   }, [location.pathname])
-
-  // ================= DARK MODE TOGGLE =================
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme")
-    if (savedTheme === "dark") {
-      setIsDarkMode(true)
-      document.documentElement.classList.add("dark")
-    }
-  }, [])
-
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode)
-    if (!isDarkMode) {
-      document.documentElement.classList.add("dark")
-      localStorage.setItem("theme", "dark")
-    } else {
-      document.documentElement.classList.remove("dark")
-      localStorage.setItem("theme", "light")
-    }
-  }
 
   // ================= LOGOUT =================
   const logoutHandler = async () => {
@@ -624,6 +607,21 @@ const Navbar = () => {
     }
   }
 
+  // ================= MARK NOTIFICATION AS READ =================
+  const markAsRead = (id) => {
+    setNotificationList(prev => prev.map(notif => 
+      notif.id === id ? { ...notif, read: true } : notif
+    ))
+    const unreadCount = notificationList.filter(n => !n.read && n.id !== id).length
+    setNotifications(unreadCount)
+  }
+
+  const markAllAsRead = () => {
+    setNotificationList(prev => prev.map(notif => ({ ...notif, read: true })))
+    setNotifications(0)
+    toast.success("All notifications marked as read")
+  }
+
   // ================= DASHBOARD ROUTE =================
   const dashboardRoute = user?.role === "admin" ? "/admin/dashboard" : "/user/dashboard"
   const profileRoute = user?.role === "admin" ? "/admin/profile" : "/user/profile"
@@ -635,13 +633,6 @@ const Navbar = () => {
     { path: "/about", label: "About", icon: BookA },
   ]
 
-  // ================= DROPDOWN ANIMATION =================
-  const dropdownVariants = {
-    hidden: { opacity: 0, scale: 0.95, y: -10 },
-    visible: { opacity: 1, scale: 1, y: 0 },
-    exit: { opacity: 0, scale: 0.95, y: -10 }
-  }
-
   return (
     <>
       <nav
@@ -649,8 +640,8 @@ const Navbar = () => {
           fixed top-0 left-0 w-full z-[500]
           transition-all duration-500 ease-out
           ${isScrolled
-            ? "bg-white/90 dark:bg-black/90 backdrop-blur-xl shadow-lg border-b border-zinc-200/50 dark:border-zinc-800/50"
-            : "bg-white dark:bg-black border-b border-zinc-100 dark:border-zinc-800"
+            ? "bg-white/95 backdrop-blur-xl shadow-lg border-b border-zinc-200/50"
+            : "bg-white border-b border-zinc-100"
           }
         `}
       >
@@ -667,17 +658,17 @@ const Navbar = () => {
                 className="flex items-center gap-3 group"
               >
                 <div className="relative">
-                  <div className="absolute inset-0 bg-gradient-to-r from-black to-zinc-800 dark:from-white dark:to-zinc-400 rounded-xl blur-md opacity-0 group-hover:opacity-50 transition-opacity duration-500" />
-                  <div className="relative bg-gradient-to-br from-black to-zinc-800 dark:from-white dark:to-zinc-400 text-white p-2.5 rounded-xl group-hover:scale-110 transition-all duration-300 shadow-lg">
+                  <div className="absolute inset-0 bg-gradient-to-r from-black to-zinc-800 rounded-xl blur-md opacity-0 group-hover:opacity-40 transition-opacity duration-500" />
+                  <div className="relative bg-gradient-to-br from-black to-zinc-800 text-white p-2.5 rounded-xl group-hover:scale-110 transition-all duration-300 shadow-lg">
                     <GraduationCap size={20} />
                   </div>
                 </div>
 
                 <div className="hidden sm:block">
-                  <h1 className="font-black text-black dark:text-white text-lg leading-none tracking-tight">
-                    Learn<span className="text-zinc-500 dark:text-zinc-400">Hub</span>
+                  <h1 className="font-black text-black text-lg leading-none tracking-tight">
+                    Learn<span className="text-zinc-500">Hub</span>
                   </h1>
-                  <p className="text-[10px] text-zinc-500 dark:text-zinc-400 font-medium tracking-wide">
+                  <p className="text-[10px] text-zinc-500 font-medium tracking-wide">
                     AI Learning Platform
                   </p>
                 </div>
@@ -714,8 +705,8 @@ const Navbar = () => {
                     relative px-4 py-2 rounded-xl text-sm font-medium
                     transition-all duration-300
                     ${isActive(item.path)
-                      ? "text-black dark:text-white bg-zinc-100 dark:bg-zinc-800"
-                      : "text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
+                      ? "text-black bg-zinc-100"
+                      : "text-zinc-600 hover:text-black hover:bg-zinc-50"
                     }
                   `}
                 >
@@ -724,35 +715,79 @@ const Navbar = () => {
                     {item.label}
                   </span>
                   {isActive(item.path) && (
-                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-black dark:bg-white rounded-full" />
+                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-black rounded-full" />
                   )}
                 </button>
               ))}
 
-              {/* NOTIFICATION BELL */}
+              {/* NOTIFICATION BELL WITH DROPDOWN */}
               {user && (
-                <button
-                  className="relative p-2 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-300"
-                  onClick={() => setNotifications(0)}
-                >
-                  <Bell size={20} className="text-zinc-600 dark:text-zinc-400" />
-                  {notifications > 0 && (
-                    <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-                  )}
-                </button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className="relative p-2 rounded-xl hover:bg-zinc-100 transition-all duration-300">
+                      <Bell size={20} className="text-zinc-600" />
+                      {notifications > 0 && (
+                        <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse" />
+                      )}
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    align="end"
+                    className="w-80 rounded-2xl border border-zinc-200 bg-white/95 backdrop-blur-xl shadow-2xl p-0 mt-3"
+                  >
+                    <div className="flex items-center justify-between p-4 border-b border-zinc-100">
+                      <DropdownMenuLabel className="p-0 font-bold text-black">
+                        Notifications
+                      </DropdownMenuLabel>
+                      {notifications > 0 && (
+                        <button
+                          onClick={markAllAsRead}
+                          className="text-xs text-blue-600 hover:text-blue-700 font-medium"
+                        >
+                          Mark all as read
+                        </button>
+                      )}
+                    </div>
+                    <div className="max-h-80 overflow-y-auto">
+                      {notificationList.length === 0 ? (
+                        <div className="p-8 text-center text-zinc-400">
+                          <Bell size={32} className="mx-auto mb-2 opacity-50" />
+                          <p className="text-sm">No notifications</p>
+                        </div>
+                      ) : (
+                        notificationList.map((notif) => (
+                          <DropdownMenuItem
+                            key={notif.id}
+                            onClick={() => markAsRead(notif.id)}
+                            className={`
+                              cursor-pointer p-4 border-b border-zinc-50 hover:bg-zinc-50
+                              ${!notif.read ? "bg-blue-50/30" : ""}
+                            `}
+                          >
+                            <div className="flex gap-3">
+                              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-white text-xs font-bold">
+                                NEW
+                              </div>
+                              <div className="flex-1">
+                                <p className="text-sm font-medium text-black">{notif.title}</p>
+                                <p className="text-xs text-zinc-400 mt-1">{notif.time}</p>
+                              </div>
+                              {!notif.read && (
+                                <div className="w-2 h-2 bg-blue-500 rounded-full mt-2" />
+                              )}
+                            </div>
+                          </DropdownMenuItem>
+                        ))
+                      )}
+                    </div>
+                    <div className="p-3 border-t border-zinc-100">
+                      <button className="w-full text-center text-sm text-blue-600 hover:text-blue-700 font-medium">
+                        View all notifications
+                      </button>
+                    </div>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               )}
-
-              {/* DARK MODE TOGGLE */}
-              <button
-                onClick={toggleDarkMode}
-                className="p-2 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-300"
-              >
-                {isDarkMode ? (
-                  <Sun size={20} className="text-yellow-500" />
-                ) : (
-                  <Moon size={20} className="text-zinc-600" />
-                )}
-              </button>
 
               {/* USER SECTION */}
               {user ? (
@@ -760,14 +795,14 @@ const Navbar = () => {
                   <DropdownMenuTrigger asChild>
                     <button className="flex items-center gap-2 ml-2 group">
                       <div className="relative">
-                        <div className="absolute inset-0 bg-gradient-to-r from-black to-zinc-800 dark:from-white dark:to-zinc-400 rounded-full blur-md opacity-0 group-hover:opacity-40 transition-opacity duration-500" />
-                        <Avatar className="cursor-pointer ring-2 ring-zinc-200 dark:ring-zinc-700 group-hover:ring-black dark:group-hover:ring-white transition-all duration-300 relative">
+                        <div className="absolute inset-0 bg-gradient-to-r from-black to-zinc-800 rounded-full blur-md opacity-0 group-hover:opacity-40 transition-opacity duration-500" />
+                        <Avatar className="cursor-pointer ring-2 ring-zinc-200 group-hover:ring-black transition-all duration-300 relative">
                           <AvatarImage src={user?.avatar} />
-                          <AvatarFallback className="bg-gradient-to-br from-black to-zinc-800 dark:from-white dark:to-zinc-400 text-white dark:text-black font-bold">
+                          <AvatarFallback className="bg-gradient-to-br from-black to-zinc-800 text-white font-bold">
                             {user?.username?.slice(0, 2).toUpperCase()}
                           </AvatarFallback>
                         </Avatar>
-                        <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full ring-2 ring-white dark:ring-black" />
+                        <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full ring-2 ring-white" />
                       </div>
                       <ChevronDown size={16} className="text-zinc-500 group-hover:rotate-180 transition-transform duration-300" />
                     </button>
@@ -775,18 +810,18 @@ const Navbar = () => {
 
                   <DropdownMenuContent
                     align="end"
-                    className="w-80 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white/95 dark:bg-black/95 backdrop-blur-xl shadow-2xl p-2 mt-3"
+                    className="w-80 rounded-2xl border border-zinc-200 bg-white/95 backdrop-blur-xl shadow-2xl p-2 mt-3"
                   >
                     <DropdownMenuLabel className="pb-3">
                       <div className="flex items-center gap-3">
-                        <Avatar className="h-12 w-12 ring-2 ring-zinc-200 dark:ring-zinc-700">
+                        <Avatar className="h-12 w-12 ring-2 ring-zinc-200">
                           <AvatarImage src={user?.avatar} />
                           <AvatarFallback className="bg-gradient-to-br from-black to-zinc-800 text-white font-bold text-lg">
                             {user?.username?.slice(0, 2).toUpperCase()}
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <h1 className="font-bold text-black dark:text-white">
+                          <h1 className="font-bold text-black">
                             {user?.username}
                           </h1>
                           <div className="flex items-center gap-2 mt-1">
@@ -805,13 +840,32 @@ const Navbar = () => {
                       </div>
                     </DropdownMenuLabel>
 
-                    <DropdownMenuSeparator className="bg-zinc-200 dark:bg-zinc-800" />
+                    <DropdownMenuSeparator className="bg-zinc-100" />
+
+                    {/* Stats Row */}
+                    <div className="flex items-center justify-around px-3 py-3 border-b border-zinc-100">
+                      <div className="text-center">
+                        <Trophy size={18} className="mx-auto text-yellow-500 mb-1" />
+                        <p className="text-xs text-zinc-500">Courses</p>
+                        <p className="text-sm font-bold text-black">12</p>
+                      </div>
+                      <div className="text-center">
+                        <Clock size={18} className="mx-auto text-blue-500 mb-1" />
+                        <p className="text-xs text-zinc-500">Hours</p>
+                        <p className="text-sm font-bold text-black">48</p>
+                      </div>
+                      <div className="text-center">
+                        <Sparkles size={18} className="mx-auto text-purple-500 mb-1" />
+                        <p className="text-xs text-zinc-500">Points</p>
+                        <p className="text-sm font-bold text-black">2,450</p>
+                      </div>
+                    </div>
 
                     <DropdownMenuItem
                       onClick={() => navigate(dashboardRoute)}
-                      className="cursor-pointer rounded-xl py-3 px-3 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-300 group"
+                      className="cursor-pointer rounded-xl py-3 px-3 hover:bg-zinc-100 transition-all duration-300 group mt-1"
                     >
-                      <LayoutDashboard className="mr-3 h-4 w-4 text-zinc-500 group-hover:text-black dark:group-hover:text-white transition-colors" />
+                      <LayoutDashboard className="mr-3 h-4 w-4 text-zinc-500 group-hover:text-black transition-colors" />
                       <span className="flex-1">
                         {user?.role === "admin" ? "Admin Dashboard" : "My Dashboard"}
                       </span>
@@ -820,28 +874,28 @@ const Navbar = () => {
 
                     <DropdownMenuItem
                       onClick={() => navigate(profileRoute)}
-                      className="cursor-pointer rounded-xl py-3 px-3 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-300 group"
+                      className="cursor-pointer rounded-xl py-3 px-3 hover:bg-zinc-100 transition-all duration-300 group"
                     >
-                      <User className="mr-3 h-4 w-4 text-zinc-500 group-hover:text-black dark:group-hover:text-white transition-colors" />
+                      <User className="mr-3 h-4 w-4 text-zinc-500 group-hover:text-black transition-colors" />
                       <span className="flex-1">Profile Settings</span>
                       <span className="text-xs text-zinc-400 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
                     </DropdownMenuItem>
 
                     <DropdownMenuItem
                       onClick={() => navigate(settingsRoute)}
-                      className="cursor-pointer rounded-xl py-3 px-3 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-300 group"
+                      className="cursor-pointer rounded-xl py-3 px-3 hover:bg-zinc-100 transition-all duration-300 group"
                     >
-                      <Settings className="mr-3 h-4 w-4 text-zinc-500 group-hover:text-black dark:group-hover:text-white transition-colors" />
+                      <Settings className="mr-3 h-4 w-4 text-zinc-500 group-hover:text-black transition-colors" />
                       <span className="flex-1">Account Settings</span>
                       <span className="text-xs text-zinc-400 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
                     </DropdownMenuItem>
 
                     <DropdownMenuSub>
-                      <DropdownMenuSubTrigger className="cursor-pointer rounded-xl py-3 px-3 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-300">
+                      <DropdownMenuSubTrigger className="cursor-pointer rounded-xl py-3 px-3 hover:bg-zinc-100 transition-all duration-300">
                         <HelpCircle className="mr-3 h-4 w-4 text-zinc-500" />
                         <span>Help & Support</span>
                       </DropdownMenuSubTrigger>
-                      <DropdownMenuSubContent className="rounded-xl bg-white dark:bg-black border border-zinc-200 dark:border-zinc-800 shadow-lg">
+                      <DropdownMenuSubContent className="rounded-xl bg-white border border-zinc-200 shadow-lg">
                         <DropdownMenuItem className="cursor-pointer py-2">
                           Documentation
                         </DropdownMenuItem>
@@ -854,11 +908,11 @@ const Navbar = () => {
                       </DropdownMenuSubContent>
                     </DropdownMenuSub>
 
-                    <DropdownMenuSeparator className="bg-zinc-200 dark:bg-zinc-800" />
+                    <DropdownMenuSeparator className="bg-zinc-100" />
 
                     <DropdownMenuItem
                       onClick={logoutHandler}
-                      className="cursor-pointer rounded-xl py-3 px-3 text-red-600 dark:text-red-400 focus:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/50 transition-all duration-300 group"
+                      className="cursor-pointer rounded-xl py-3 px-3 text-red-600 focus:text-red-600 hover:bg-red-50 transition-all duration-300 group"
                     >
                       <LogOut className="mr-3 h-4 w-4" />
                       <span className="flex-1">Logout</span>
@@ -866,26 +920,34 @@ const Navbar = () => {
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
-                <Link
-                  to="/login"
-                  className="relative px-6 py-2.5 rounded-xl bg-gradient-to-r from-black to-zinc-800 dark:from-white dark:to-zinc-400 text-white dark:text-black font-semibold text-sm hover:shadow-xl transition-all duration-300 overflow-hidden group"
-                >
-                  <span className="absolute inset-0 bg-gradient-to-r from-zinc-700 to-black dark:from-zinc-300 dark:to-white opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <span className="relative">Login / Sign Up</span>
-                </Link>
+                <div className="flex items-center gap-2">
+                  <Link
+                    to="/login"
+                    className="relative px-5 py-2 rounded-xl bg-transparent border border-black text-black font-semibold text-sm hover:bg-black hover:text-white transition-all duration-300"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="relative px-5 py-2 rounded-xl bg-gradient-to-r from-black to-zinc-800 text-white font-semibold text-sm hover:shadow-xl transition-all duration-300 overflow-hidden group"
+                  >
+                    <span className="absolute inset-0 bg-gradient-to-r from-zinc-700 to-black opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    <span className="relative">Sign Up</span>
+                  </Link>
+                </div>
               )}
             </div>
 
             {/* ================= MOBILE TOGGLE ================= */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden relative w-10 h-10 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-300"
+              className="md:hidden relative w-10 h-10 rounded-xl hover:bg-zinc-100 transition-all duration-300"
             >
               <div className="absolute inset-0 flex items-center justify-center">
                 {isMobileMenuOpen ? (
-                  <X className="h-6 w-6 text-black dark:text-white animate-in zoom-in duration-300" />
+                  <X className="h-6 w-6 text-black animate-in zoom-in duration-300" />
                 ) : (
-                  <Menu className="h-6 w-6 text-black dark:text-white animate-in zoom-in duration-300" />
+                  <Menu className="h-6 w-6 text-black animate-in zoom-in duration-300" />
                 )}
               </div>
             </button>
@@ -903,21 +965,21 @@ const Navbar = () => {
             }
           `}
         >
-          <div className="bg-white/95 dark:bg-black/95 backdrop-blur-xl border-t border-zinc-200 dark:border-zinc-800 px-5 py-6">
+          <div className="bg-white/95 backdrop-blur-xl border-t border-zinc-200 px-5 py-6">
 
             {user ? (
               <div className="flex flex-col gap-4">
 
                 {/* USER INFO CARD */}
-                <div className="flex items-center gap-4 p-4 rounded-2xl bg-gradient-to-br from-zinc-50 to-white dark:from-zinc-900 dark:to-black border border-zinc-200 dark:border-zinc-800">
-                  <Avatar className="h-14 w-14 ring-2 ring-zinc-200 dark:ring-zinc-700">
+                <div className="flex items-center gap-4 p-4 rounded-2xl bg-gradient-to-br from-zinc-50 to-white border border-zinc-200">
+                  <Avatar className="h-14 w-14 ring-2 ring-zinc-200">
                     <AvatarImage src={user?.avatar} />
                     <AvatarFallback className="bg-gradient-to-br from-black to-zinc-800 text-white font-bold text-lg">
                       {user?.username?.slice(0, 2).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <h1 className="font-bold text-black dark:text-white text-lg">
+                    <h1 className="font-bold text-black text-lg">
                       {user?.username}
                     </h1>
                     <div className="flex items-center gap-2 mt-1">
@@ -934,6 +996,25 @@ const Navbar = () => {
                   </div>
                 </div>
 
+                {/* Stats Row for Mobile */}
+                <div className="flex items-center justify-around py-3 bg-zinc-50 rounded-2xl">
+                  <div className="text-center">
+                    <Trophy size={18} className="mx-auto text-yellow-500 mb-1" />
+                    <p className="text-xs text-zinc-500">Courses</p>
+                    <p className="text-sm font-bold text-black">12</p>
+                  </div>
+                  <div className="text-center">
+                    <Clock size={18} className="mx-auto text-blue-500 mb-1" />
+                    <p className="text-xs text-zinc-500">Hours</p>
+                    <p className="text-sm font-bold text-black">48</p>
+                  </div>
+                  <div className="text-center">
+                    <Sparkles size={18} className="mx-auto text-purple-500 mb-1" />
+                    <p className="text-xs text-zinc-500">Points</p>
+                    <p className="text-sm font-bold text-black">2,450</p>
+                  </div>
+                </div>
+
                 {/* MOBILE NAV ITEMS */}
                 {[
                   { icon: LayoutDashboard, label: user?.role === "admin" ? "Admin Dashboard" : "User Dashboard", route: dashboardRoute },
@@ -946,54 +1027,54 @@ const Navbar = () => {
                   <button
                     key={idx}
                     onClick={() => navigate(item.route)}
-                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-black dark:text-white font-medium hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-300 group"
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-black font-medium hover:bg-zinc-100 transition-all duration-300 group"
                   >
-                    <item.icon size={20} className="text-zinc-500 group-hover:text-black dark:group-hover:text-white transition-colors" />
+                    <item.icon size={20} className="text-zinc-500 group-hover:text-black transition-colors" />
                     <span className="flex-1 text-left">{item.label}</span>
                     <span className="text-zinc-400 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
                   </button>
                 ))}
 
-                {/* DARK MODE TOGGLE FOR MOBILE */}
-                <button
-                  onClick={toggleDarkMode}
-                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-black dark:text-white font-medium hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-300"
-                >
-                  {isDarkMode ? (
-                    <>
-                      <Sun size={20} className="text-yellow-500" />
-                      <span>Light Mode</span>
-                    </>
-                  ) : (
-                    <>
-                      <Moon size={20} className="text-zinc-600" />
-                      <span>Dark Mode</span>
-                    </>
-                  )}
-                </button>
+                <div className="h-px bg-gradient-to-r from-transparent via-zinc-200 to-transparent my-2" />
 
-                <div className="h-px bg-gradient-to-r from-transparent via-zinc-200 dark:via-zinc-800 to-transparent my-2" />
+                {/* NOTIFICATION SECTION FOR MOBILE */}
+                {notifications > 0 && (
+                  <div className="bg-blue-50 rounded-xl p-3">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-bold text-blue-600">Notifications</span>
+                      <button 
+                        onClick={markAllAsRead}
+                        className="text-xs text-blue-500"
+                      >
+                        Mark all read
+                      </button>
+                    </div>
+                    <p className="text-sm text-blue-700">
+                      You have {notifications} new notification{notifications > 1 ? 's' : ''}
+                    </p>
+                  </div>
+                )}
 
                 {/* LOGOUT BUTTON */}
                 <button
                   onClick={logoutHandler}
-                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 dark:text-red-400 font-medium hover:bg-red-50 dark:hover:bg-red-950/50 transition-all duration-300"
+                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 font-medium hover:bg-red-50 transition-all duration-300"
                 >
                   <LogOut size={20} />
                   <span>Logout</span>
                 </button>
               </div>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <Link
                   to="/login"
-                  className="block w-full text-center bg-gradient-to-r from-black to-zinc-800 dark:from-white dark:to-zinc-400 text-white dark:text-black py-3 rounded-xl font-semibold transition-all duration-300 hover:shadow-lg"
+                  className="block w-full text-center bg-gradient-to-r from-black to-zinc-800 text-white py-3 rounded-xl font-semibold transition-all duration-300 hover:shadow-lg"
                 >
                   Login
                 </Link>
                 <Link
                   to="/register"
-                  className="block w-full text-center border-2 border-black dark:border-white text-black dark:text-white py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black"
+                  className="block w-full text-center border-2 border-black text-black py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-black hover:text-white"
                 >
                   Sign Up
                 </Link>
