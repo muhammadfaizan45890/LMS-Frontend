@@ -8,7 +8,7 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
-  ShieldCheck,
+  GraduationCap,
   BookOpen,
   Play,
   DollarSignIcon,
@@ -129,7 +129,7 @@ const AdminSidebar = () => {
           {/* LEFT */}
           <div className="flex items-center gap-3">
             <div className="bg-black text-white p-2 rounded-xl">
-              <ShieldCheck size={20} />
+              <GraduationCap size={20} />
             </div>
 
             {!collapsed && (
