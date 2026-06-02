@@ -846,17 +846,17 @@ const Navbar = () => {
                       <div className="text-center">
                         <Trophy size={18} className="mx-auto text-yellow-500 mb-1" />
                         <p className="text-xs text-zinc-500">Courses</p>
-                        <p className="text-sm font-bold text-black">12</p>
+                        {/* <p className="text-sm font-bold text-black">12</p> */}
                       </div>
                       <div className="text-center">
                         <Clock size={18} className="mx-auto text-blue-500 mb-1" />
                         <p className="text-xs text-zinc-500">Hours</p>
-                        <p className="text-sm font-bold text-black">48</p>
+                        {/* <p className="text-sm font-bold text-black">48</p> */}
                       </div>
                       <div className="text-center">
                         <Sparkles size={18} className="mx-auto text-purple-500 mb-1" />
                         <p className="text-xs text-zinc-500">Points</p>
-                        <p className="text-sm font-bold text-black">2,450</p>
+                        {/* <p className="text-sm font-bold text-black">2,450</p> */}
                       </div>
                     </div>
 
@@ -880,14 +880,14 @@ const Navbar = () => {
                       <span className="text-xs text-zinc-400 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
                     </DropdownMenuItem>
 
-                    <DropdownMenuItem
+                    {/* <DropdownMenuItem
                       onClick={() => navigate(settingsRoute)}
                       className="cursor-pointer rounded-xl py-3 px-3 hover:bg-zinc-100 transition-all duration-300 group"
                     >
                       <Settings className="mr-3 h-4 w-4 text-zinc-500 group-hover:text-black transition-colors" />
                       <span className="flex-1">Account Settings</span>
                       <span className="text-xs text-zinc-400 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-                    </DropdownMenuItem>
+                    </DropdownMenuItem> */}
 
                     <DropdownMenuSub>
                       <DropdownMenuSubTrigger className="cursor-pointer rounded-xl py-3 px-3 hover:bg-zinc-100 transition-all duration-300">
@@ -927,7 +927,7 @@ const Navbar = () => {
                     Login
                   </Link>
                   <Link
-                    to="/register"
+                    to="/signup"
                     className="relative px-5 py-2 rounded-xl bg-gradient-to-r from-black to-zinc-800 text-white font-semibold text-sm hover:shadow-xl transition-all duration-300 overflow-hidden group"
                   >
                     <span className="absolute inset-0 bg-gradient-to-r from-zinc-700 to-black opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -1000,17 +1000,17 @@ const Navbar = () => {
                   <div className="text-center">
                     <Trophy size={18} className="mx-auto text-yellow-500 mb-1" />
                     <p className="text-xs text-zinc-500">Courses</p>
-                    <p className="text-sm font-bold text-black">12</p>
+                    {/* <p className="text-sm font-bold text-black">12</p> */}
                   </div>
                   <div className="text-center">
                     <Clock size={18} className="mx-auto text-blue-500 mb-1" />
                     <p className="text-xs text-zinc-500">Hours</p>
-                    <p className="text-sm font-bold text-black">48</p>
+                    {/* <p className="text-sm font-bold text-black">48</p> */}
                   </div>
                   <div className="text-center">
                     <Sparkles size={18} className="mx-auto text-purple-500 mb-1" />
                     <p className="text-xs text-zinc-500">Points</p>
-                    <p className="text-sm font-bold text-black">2,450</p>
+                    {/* <p className="text-sm font-bold text-black">2,450</p> */}
                   </div>
                 </div>
 
@@ -1021,7 +1021,7 @@ const Navbar = () => {
                   { icon: Settings, label: "Settings", route: settingsRoute },
                   { icon: Home, label: "Home", route: "/" },
                   { icon: BookA, label: "About", route: "/about" },
-                  { icon: HelpCircle, label: "Help", route: "/help" },
+                  // { icon: HelpCircle, label: "Help", route: "/help" },
                 ].map((item, idx) => (
                   <button
                     key={idx}
