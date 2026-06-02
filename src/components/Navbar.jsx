@@ -643,7 +643,7 @@ const Navbar = () => {
       >
         {/* ================= CONTAINER ================= */}
         <div className="px-4 sm:px-6 lg:px-8">
-          <div className="pt-16 flex items-center justify-between">
+          <div className="h-16 flex items-center justify-between">
 
             {/* ================= LEFT SECTION ================= */}
             <div className="flex items-center gap-4">
