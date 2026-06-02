@@ -555,7 +555,7 @@ const Navbar = () => {
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
-  const [notifications, setNotifications] = useState(3)
+  const [notifications, setNotifications] = useState(0)
   const [notificationList, setNotificationList] = useState(0)
 
   // ================= CHECK CURRENT PANEL =================
