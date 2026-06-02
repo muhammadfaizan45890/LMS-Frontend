@@ -1001,7 +1001,7 @@ const Navbar = () => {
                 {[
                   { icon: LayoutDashboard, label: user?.role === "admin" ? "Admin Dashboard" : "User Dashboard", route: dashboardRoute },
                   { icon: User, label: "Profile", route: profileRoute },
-                  { icon: Settings, label: "Settings", route: settingsRoute },
+                  // { icon: Settings, label: "Settings", route: settingsRoute },
                   { icon: Home, label: "Home", route: "/" },
                   { icon: BookA, label: "About", route: "/about" },
                 ].map((item, idx) => (
