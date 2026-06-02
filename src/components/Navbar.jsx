@@ -8,7 +8,7 @@ import {
   Menu,
   X,
   LayoutDashboard,
-  ShieldCheck,
+  GraduationCap,
   Home
 } from 'lucide-react'
 
@@ -146,7 +146,7 @@ const Navbar = () => {
                 transition
               "
             >
-              <ShieldCheck size={18} />
+              <GraduationCap size={18} />
             </div>
 
             <div className="hidden sm:block">
