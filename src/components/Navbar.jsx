@@ -297,12 +297,13 @@ const Navbar = () => {
                 </DropdownMenuItem>
 
              {/* ABOUT */}
-<NavLink to="/about">
-  <DropdownMenuItem className="cursor-pointer rounded-xl py-3">
-    <BookA className="mr-2 h-4 w-4" />
-    About
-  </DropdownMenuItem>
-</NavLink>
+<DropdownMenuItem
+  onClick={() => navigate("/about")}
+  className="cursor-pointer rounded-xl py-3"
+>
+  <BookA className="mr-2 h-4 w-4" />
+  About
+</DropdownMenuItem>
 
 <DropdownMenuSeparator />
                 {/* LOGOUT */}
