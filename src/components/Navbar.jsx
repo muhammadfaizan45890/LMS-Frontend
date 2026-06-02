@@ -567,7 +567,6 @@ const Navbar = () => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10)
     }
-
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
@@ -643,28 +642,28 @@ const Navbar = () => {
       >
         {/* ================= CONTAINER ================= */}
         <div className="px-4 sm:px-6 lg:px-8">
-          <div className="h-16 flex items-center justify-between">
+          <div className="h-16 flex items-center justify-between gap-2">
 
             {/* ================= LEFT SECTION ================= */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 md:gap-4 flex-1 min-w-0">
 
               {/* ANIMATED LOGO */}
               <Link
                 to="/"
-                className="flex items-center gap-3 group"
+                className="flex items-center gap-2 sm:gap-3 group flex-shrink-0"
               >
                 <div className="relative">
                   <div className="absolute inset-0 bg-gradient-to-r from-black to-zinc-800 rounded-xl blur-md opacity-0 group-hover:opacity-40 transition-opacity duration-500" />
-                  <div className="relative bg-gradient-to-br from-black to-zinc-800 text-white p-2.5 rounded-xl group-hover:scale-110 transition-all duration-300 shadow-lg">
+                  <div className="relative bg-gradient-to-br from-black to-zinc-800 text-white p-2 rounded-xl group-hover:scale-110 transition-all duration-300 shadow-lg">
                     <GraduationCap size={20} />
                   </div>
                 </div>
 
                 <div className="hidden sm:block">
-                  <h1 className="font-black text-black text-lg leading-none tracking-tight">
+                  <h1 className="font-black text-black text-base sm:text-lg leading-none tracking-tight">
                     Learn<span className="text-zinc-500">Hub</span>
                   </h1>
-                  <p className="text-[10px] text-zinc-500 font-medium tracking-wide">
+                  <p className="text-[9px] sm:text-[10px] text-zinc-500 font-medium tracking-wide">
                     AI Learning Platform
                   </p>
                 </div>
@@ -672,10 +671,10 @@ const Navbar = () => {
 
               {/* PANEL BADGE WITH GLOW EFFECT */}
               {(isAdminPanel || isUserPanel) && (
-                <div className="hidden md:flex relative">
+                <div className="hidden md:flex relative flex-shrink-0">
                   <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full blur-md opacity-30" />
                   <div className={`
-                    relative flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold shadow-lg
+                    relative flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-bold shadow-lg whitespace-nowrap
                     ${isAdminPanel
                       ? "bg-gradient-to-r from-red-500 to-orange-500 text-white"
                       : "bg-gradient-to-r from-blue-500 to-cyan-500 text-white"
@@ -690,7 +689,7 @@ const Navbar = () => {
             </div>
 
             {/* ================= DESKTOP MENU ================= */}
-            <div className="hidden md:flex items-center gap-2 lg:gap-3">
+            <div className="hidden md:flex items-center gap-1 lg:gap-3">
 
               {/* NAVIGATION ITEMS */}
               {navItems.map((item) => (
@@ -698,8 +697,8 @@ const Navbar = () => {
                   key={item.path}
                   onClick={() => navigate(item.path)}
                   className={`
-                    relative px-4 py-2 rounded-xl text-sm font-medium
-                    transition-all duration-300
+                    relative px-3 py-2 rounded-xl text-sm font-medium
+                    transition-all duration-300 whitespace-nowrap
                     ${isActive(item.path)
                       ? "text-black bg-zinc-100"
                       : "text-zinc-600 hover:text-black hover:bg-zinc-50"
@@ -907,13 +906,13 @@ const Navbar = () => {
                 <div className="flex items-center gap-2">
                   <Link
                     to="/login"
-                    className="relative px-5 py-2 rounded-xl bg-transparent border border-black text-black font-semibold text-sm hover:bg-black hover:text-white transition-all duration-300"
+                    className="relative px-4 py-2 rounded-xl bg-transparent border border-black text-black font-semibold text-sm hover:bg-black hover:text-white transition-all duration-300"
                   >
                     Login
                   </Link>
                   <Link
                     to="/signup"
-                    className="relative px-5 py-2 rounded-xl bg-gradient-to-r from-black to-zinc-800 text-white font-semibold text-sm hover:shadow-xl transition-all duration-300 overflow-hidden group"
+                    className="relative px-4 py-2 rounded-xl bg-gradient-to-r from-black to-zinc-800 text-white font-semibold text-sm hover:shadow-xl transition-all duration-300 overflow-hidden group"
                   >
                     <span className="absolute inset-0 bg-gradient-to-r from-zinc-700 to-black opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     <span className="relative">Sign Up</span>
@@ -925,8 +924,8 @@ const Navbar = () => {
             {/* ================= MOBILE TOGGLE ================= */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden relative w-10 h-10 rounded-xl hover:bg-zinc-100 transition-all duration-300"
-              aria-label="Toggle menu"
+              className="md:hidden relative w-10 h-10 rounded-xl hover:bg-zinc-100 transition-all duration-300 flex-shrink-0"
+              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
             >
               <div className="absolute inset-0 flex items-center justify-center">
                 {isMobileMenuOpen ? (
@@ -957,7 +956,7 @@ const Navbar = () => {
 
                 {/* USER INFO CARD */}
                 <div className="flex items-center gap-4 p-4 rounded-2xl bg-gradient-to-br from-zinc-50 to-white border border-zinc-200">
-                  <Avatar className="h-14 w-14 ring-2 ring-zinc-200">
+                  <Avatar className="h-14 w-14 ring-2 ring-zinc-200 flex-shrink-0">
                     <AvatarImage src={user?.avatar} />
                     <AvatarFallback className="bg-gradient-to-br from-black to-zinc-800 text-white font-bold text-lg">
                       {user?.username?.slice(0, 2).toUpperCase()}
@@ -1001,7 +1000,6 @@ const Navbar = () => {
                 {[
                   { icon: LayoutDashboard, label: user?.role === "admin" ? "Admin Dashboard" : "User Dashboard", route: dashboardRoute },
                   { icon: User, label: "Profile", route: profileRoute },
-                  // { icon: Settings, label: "Settings", route: settingsRoute },
                   { icon: Home, label: "Home", route: "/" },
                   { icon: BookA, label: "About", route: "/about" },
                 ].map((item, idx) => (
@@ -1011,9 +1009,9 @@ const Navbar = () => {
                       navigate(item.route)
                       setIsMobileMenuOpen(false)
                     }}
-                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-black font-medium hover:bg-zinc-100 transition-all duration-300 group"
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-black font-medium hover:bg-zinc-100 transition-all duration-300 group w-full text-left"
                   >
-                    <item.icon size={20} className="text-zinc-500 group-hover:text-black transition-colors" />
+                    <item.icon size={20} className="text-zinc-500 group-hover:text-black transition-colors flex-shrink-0" />
                     <span className="flex-1 text-left">{item.label}</span>
                     <span className="text-zinc-400 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
                   </button>
@@ -1042,7 +1040,7 @@ const Navbar = () => {
                 {/* LOGOUT BUTTON */}
                 <button
                   onClick={logoutHandler}
-                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 font-medium hover:bg-red-50 transition-all duration-300"
+                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 font-medium hover:bg-red-50 transition-all duration-300 group w-full text-left"
                 >
                   <LogOut size={20} />
                   <span>Logout</span>
