@@ -532,6 +532,7 @@
 // export default Hero;
 
 
+
 import {
   ArrowRight,
   Sparkles,
@@ -569,12 +570,11 @@ const Hero = () => {
   const handleExploreAI = () => {
     setButtonState("exploring");
     setTimeout(() => {
-      // Add explore AI logic here
       setButtonState("idle");
     }, 500);
   };
 
-  // Auto-scroll animation for background
+  // Parallax background effect (only moves on scroll – no fade)
   useEffect(() => {
     const handleScroll = () => {
       const scrolled = window.scrollY;
@@ -591,28 +591,23 @@ const Hero = () => {
   return (
     <div className="relative w-full min-h-screen overflow-x-hidden bg-gradient-to-br from-white via-zinc-50 to-white text-black">
 
-      {/* ================= ADVANCED BACKGROUND EFFECTS ================= */}
+      {/* ================= BACKGROUND EFFECTS (no fade, only parallax & CSS animations) ================= */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Animated gradient orbs */}
         <div className="parallax-bg absolute top-[-100px] left-[-100px] w-[350px] h-[350px] bg-gradient-to-r from-zinc-200 to-zinc-300 rounded-full blur-[120px] opacity-60 animate-pulse-slow" />
         <div className="parallax-bg absolute bottom-[-120px] right-[-100px] w-[400px] h-[400px] bg-gradient-to-l from-zinc-300 to-zinc-400 rounded-full blur-[140px] opacity-50 animate-pulse-slower" />
         <div className="parallax-bg absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-tr from-zinc-100 via-zinc-200 to-zinc-100 rounded-full blur-[150px] opacity-40 animate-spin-slow" />
-        
-        {/* Grid pattern overlay */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px]" />
-        
-        {/* Radial gradient overlay */}
         <div className="absolute inset-0 bg-radial-gradient from-transparent via-transparent to-white/50" />
       </div>
 
-      {/* ================= MAIN CONTENT ================= */}
+      {/* ================= MAIN CONTENT (no fade-in transitions) ================= */}
       <section className="relative z-10 w-full min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 items-center">
 
           {/* ================= LEFT CONTENT ================= */}
           <div className="flex flex-col items-center lg:items-start text-center lg:text-left space-y-6 sm:space-y-8">
 
-            {/* USER INFO - Responsive */}
+            {/* USER INFO */}
             {user && (
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 sm:gap-4">
                 <div className="flex items-center gap-3 bg-white/80 backdrop-blur-sm border border-zinc-200 shadow-lg rounded-full px-4 sm:px-5 py-2 hover:shadow-xl transition-shadow duration-300">
@@ -620,15 +615,12 @@ const Hero = () => {
                     {user.username?.charAt(0) || "U"}
                   </div>
                   <div className="text-left">
-                    <p className="text-[10px] sm:text-xs text-zinc-500 font-medium">
-                      Welcome Back
-                    </p>
+                    <p className="text-[10px] sm:text-xs text-zinc-500 font-medium">Welcome Back</p>
                     <h3 className="font-semibold text-sm sm:text-base truncate max-w-[120px] sm:max-w-[150px]">
                       {user.username || "User"}
                     </h3>
                   </div>
                 </div>
-
                 <div className={`
                   px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-[10px] sm:text-xs font-bold tracking-wider shadow-md border
                   ${user.role === "admin"
@@ -640,7 +632,7 @@ const Hero = () => {
               </div>
             )}
 
-            {/* BADGE - Responsive */}
+            {/* BADGE with hover scale */}
             <div className="transform hover:scale-105 transition-transform duration-300">
               <Badge className="bg-gradient-to-r from-black to-zinc-800 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-[11px] sm:text-sm font-semibold shadow-xl border border-zinc-700">
                 <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 mr-1.5 sm:mr-2" />
@@ -648,7 +640,7 @@ const Hero = () => {
               </Badge>
             </div>
 
-            {/* HEADING - Fully Responsive */}
+            {/* HEADING – fully responsive, no animation */}
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-[1.1] sm:leading-tight tracking-tighter">
               Intelligent
               <span className="block bg-gradient-to-r from-zinc-800 via-zinc-600 to-zinc-800 bg-clip-text text-transparent mt-1 sm:mt-2">
@@ -659,7 +651,7 @@ const Hero = () => {
               </span>
             </h1>
 
-            {/* DESCRIPTION - Responsive */}
+            {/* DESCRIPTION */}
             <p className="max-w-2xl text-zinc-600 text-sm sm:text-base md:text-lg leading-relaxed sm:leading-relaxed">
               Experience a modern AI-powered platform that helps students
               learn smarter, stay organized, and access secure educational
@@ -667,9 +659,9 @@ const Hero = () => {
               for productivity and growth.
             </p>
 
-            {/* BUTTONS - ONLY ANIMATED BUTTONS */}
+            {/* BUTTONS – only animated elements */}
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto pt-2 sm:pt-4">
-              {/* Animated Get Started Button */}
+              {/* Get Started Button */}
               <div className="relative group">
                 <Button
                   onClick={handleGetStarted}
@@ -677,21 +669,10 @@ const Hero = () => {
                   onMouseEnter={() => setIsHovered(true)}
                   onMouseLeave={() => setIsHovered(false)}
                   size="lg"
-                  className="
-                    relative h-12 sm:h-14 px-6 sm:px-8 rounded-2xl
-                    bg-gradient-to-r from-black to-zinc-800
-                    text-white font-semibold text-sm sm:text-base
-                    hover:shadow-2xl hover:shadow-black/20
-                    transition-all duration-300 ease-out
-                    overflow-hidden group
-                  "
+                  className="relative h-12 sm:h-14 px-6 sm:px-8 rounded-2xl bg-gradient-to-r from-black to-zinc-800 text-white font-semibold text-sm sm:text-base hover:shadow-2xl hover:shadow-black/20 transition-all duration-300 ease-out overflow-hidden group"
                 >
-                  {/* Animated background overlay */}
                   <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-zinc-700 to-black opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  
-                  {/* Shine effect on hover */}
                   <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-                  
                   <span className="relative z-10 flex items-center">
                     {buttonState === "loading" ? (
                       <>
@@ -709,12 +690,10 @@ const Hero = () => {
                     )}
                   </span>
                 </Button>
-                
-                {/* Glow effect */}
                 <div className="absolute -inset-1 bg-gradient-to-r from-black/20 to-transparent rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
               </div>
 
-              {/* Animated Explore AI Button */}
+              {/* Explore AI Button */}
               <div className="relative group">
                 <Button
                   variant="outline"
@@ -723,19 +702,9 @@ const Hero = () => {
                   disabled={buttonState === "exploring"}
                   onMouseEnter={() => setIsHovered(true)}
                   onMouseLeave={() => setIsHovered(false)}
-                  className="
-                    relative h-12 sm:h-14 px-6 sm:px-8 rounded-2xl
-                    border-2 border-black/20
-                    text-black font-semibold text-sm sm:text-base
-                    hover:bg-black hover:text-white
-                    hover:border-black
-                    transition-all duration-300 ease-out
-                    overflow-hidden group
-                  "
+                  className="relative h-12 sm:h-14 px-6 sm:px-8 rounded-2xl border-2 border-black/20 text-black font-semibold text-sm sm:text-base hover:bg-black hover:text-white hover:border-black transition-all duration-300 ease-out overflow-hidden group"
                 >
-                  {/* Animated background */}
                   <span className="absolute inset-0 w-full h-full bg-black scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
-                  
                   <span className="relative z-10 flex items-center">
                     {buttonState === "exploring" ? (
                       <>
@@ -756,7 +725,7 @@ const Hero = () => {
               </div>
             </div>
 
-            {/* TRUST LINE - Responsive */}
+            {/* TRUST LINE – hover scale on icons */}
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 sm:gap-6 pt-4 sm:pt-6">
               {[
                 { icon: ShieldCheck, label: "Secure Platform" },
@@ -769,22 +738,12 @@ const Hero = () => {
                 </div>
               ))}
             </div>
-
           </div>
 
-          {/* ================= RIGHT SIDE - Fully Responsive Dashboard Preview ================= */}
+          {/* ================= RIGHT SIDE – Dashboard Preview (no fade, only hover shadow) ================= */}
           <div className="relative flex justify-center mt-8 lg:mt-0">
-            <div className="
-              relative w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl
-              rounded-[30px] sm:rounded-[35px]
-              bg-white/90 backdrop-blur-xl
-              border border-zinc-200/50
-              shadow-[0_20px_60px_rgba(0,0,0,0.08)]
-              hover:shadow-[0_25px_70px_rgba(0,0,0,0.12)]
-              transition-shadow duration-500
-              overflow-hidden
-            ">
-              {/* TOP BAR - Responsive */}
+            <div className="relative w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl rounded-[30px] sm:rounded-[35px] bg-white/90 backdrop-blur-xl border border-zinc-200/50 shadow-[0_20px_60px_rgba(0,0,0,0.08)] hover:shadow-[0_25px_70px_rgba(0,0,0,0.12)] transition-shadow duration-500 overflow-hidden">
+              {/* Top bar */}
               <div className="flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-3 sm:py-5 border-b border-zinc-200/50 bg-white/50">
                 <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-red-400/80" />
                 <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-yellow-400/80" />
@@ -794,60 +753,50 @@ const Hero = () => {
                 </div>
               </div>
 
-              {/* CONTENT */}
+              {/* Content */}
               <div className="p-5 sm:p-6 md:p-8">
-
-                {/* HEADER - Responsive */}
+                {/* Header */}
                 <div className="flex items-center justify-between gap-3 sm:gap-4 mb-6 sm:mb-8">
                   <div>
                     <h2 className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-zinc-800 to-zinc-600 bg-clip-text text-transparent">
                       Student Dashboard
                     </h2>
-                    <p className="text-zinc-500 text-xs sm:text-sm mt-1 sm:mt-2">
-                      Manage your learning journey
-                    </p>
+                    <p className="text-zinc-500 text-xs sm:text-sm mt-1 sm:mt-2">Manage your learning journey</p>
                   </div>
                   <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl sm:rounded-2xl bg-gradient-to-br from-black to-zinc-800 text-white flex items-center justify-center shadow-lg">
                     <BrainCircuit size={24} className="sm:w-7 sm:h-7 md:w-8 md:h-8" />
                   </div>
                 </div>
 
-                {/* GRID - Fully Responsive */}
+                {/* Grid cards – hover effects only */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-
-                  {/* CARD 1 */}
+                  {/* Card 1 */}
                   <div className="bg-gradient-to-br from-zinc-50 to-white border border-zinc-200 rounded-2xl sm:rounded-3xl p-4 sm:p-5 md:p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-default">
                     <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-xl sm:rounded-2xl bg-gradient-to-br from-black to-zinc-800 text-white flex items-center justify-center mb-3 sm:mb-4 md:mb-5 shadow-md">
                       <PlayCircle size={20} className="sm:w-5 sm:h-5 md:w-6 md:h-6" />
                     </div>
-                    <h3 className="text-base sm:text-lg md:text-xl font-bold">
-                      Video Learning
-                    </h3>
+                    <h3 className="text-base sm:text-lg md:text-xl font-bold">Video Learning</h3>
                     <p className="text-zinc-500 text-xs sm:text-sm mt-2 sm:mt-3 leading-relaxed">
                       Watch secure lectures with advanced controls.
                     </p>
                   </div>
 
-                  {/* CARD 2 */}
+                  {/* Card 2 */}
                   <div className="bg-gradient-to-br from-zinc-50 to-white border border-zinc-200 rounded-2xl sm:rounded-3xl p-4 sm:p-5 md:p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-default">
                     <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-xl sm:rounded-2xl bg-gradient-to-br from-black to-zinc-800 text-white flex items-center justify-center mb-3 sm:mb-4 md:mb-5 shadow-md">
                       <ShieldCheck size={20} className="sm:w-5 sm:h-5 md:w-6 md:h-6" />
                     </div>
-                    <h3 className="text-base sm:text-lg md:text-xl font-bold">
-                      Secure Access
-                    </h3>
+                    <h3 className="text-base sm:text-lg md:text-xl font-bold">Secure Access</h3>
                     <p className="text-zinc-500 text-xs sm:text-sm mt-2 sm:mt-3 leading-relaxed">
                       Protected environment with role access.
                     </p>
                   </div>
 
-                  {/* CARD 3 - Full Width */}
+                  {/* Card 3 – full width */}
                   <div className="sm:col-span-2 bg-gradient-to-r from-black to-zinc-800 text-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 md:p-6 hover:shadow-2xl transition-all duration-300">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-6">
                       <div>
-                        <p className="text-zinc-400 text-[10px] sm:text-xs font-mono">
-                          PLATFORM STATUS
-                        </p>
+                        <p className="text-zinc-400 text-[10px] sm:text-xs font-mono">PLATFORM STATUS</p>
                         <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mt-1 sm:mt-2 bg-gradient-to-r from-white to-zinc-300 bg-clip-text text-transparent">
                           Active & Ready
                         </h2>
@@ -857,10 +806,9 @@ const Hero = () => {
                       </div>
                     </div>
                   </div>
-
                 </div>
 
-                {/* Progress Bar - Additional Feature */}
+                {/* Progress bar */}
                 <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-zinc-200/50">
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-[10px] sm:text-xs text-zinc-500 font-medium">Today's Progress</span>
@@ -870,22 +818,18 @@ const Hero = () => {
                     <div className="h-full bg-gradient-to-r from-black to-zinc-600 rounded-full" style={{ width: '65%' }} />
                   </div>
                 </div>
-
               </div>
-
             </div>
 
-            {/* Floating badge - Responsive */}
+            {/* Floating NEW badge (pulse animation) */}
             <div className="absolute -top-3 -right-3 sm:-top-4 sm:-right-4 bg-gradient-to-r from-yellow-400 to-orange-400 text-white text-[10px] sm:text-xs font-bold px-2 sm:px-3 py-1 sm:py-1.5 rounded-full shadow-lg animate-pulse-slow">
               NEW
             </div>
-
           </div>
-
         </div>
       </section>
 
-      {/* Custom CSS for animations */}
+      {/* Custom CSS for background animations */}
       <style jsx>{`
         @keyframes pulse-slow {
           0%, 100% { opacity: 0.6; }
