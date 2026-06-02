@@ -36,8 +36,7 @@ const Middle = () => {
   const navigate = useNavigate();
   const [hoveredFeature, setHoveredFeature] = useState(null);
   const [hoveredStep, setHoveredStep] = useState(null);
-  const [isVisible, setIsVisible] = useState({});
-  const sectionRefs = useRef({});
+  const heroRef = useRef(null);
 
   // ================= CHECK LOGIN =================
   const userId = localStorage.getItem("userId");
@@ -50,33 +49,6 @@ const Middle = () => {
     }
   };
 
-  // ================= INTERSECTION OBSERVER FOR SCROLL ANIMATIONS =================
-  useEffect(() => {
-    const observers = {};
-    const sections = ['hero', 'steps', 'features', 'cta'];
-    
-    sections.forEach((section) => {
-      if (sectionRefs.current[section]) {
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                setIsVisible(prev => ({ ...prev, [section]: true }));
-              }
-            });
-          },
-          { threshold: 0.2 }
-        );
-        observer.observe(sectionRefs.current[section]);
-        observers[section] = observer;
-      }
-    });
-
-    return () => {
-      Object.values(observers).forEach(observer => observer.disconnect());
-    };
-  }, []);
-
   // ================= COUNTER ANIMATION =================
   const [counters, setCounters] = useState({
     students: 0,
@@ -86,27 +58,40 @@ const Middle = () => {
   });
 
   useEffect(() => {
-    if (isVisible.hero) {
-      const targets = { students: 15000, courses: 120, certificates: 8500, experts: 45 };
-      const duration = 2000;
-      const interval = 20;
-      const steps = duration / interval;
-      let step = 0;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const targets = { students: 15000, courses: 120, certificates: 8500, experts: 45 };
+            const duration = 2000;
+            const interval = 20;
+            const steps = duration / interval;
+            let step = 0;
 
-      const timer = setInterval(() => {
-        step++;
-        setCounters({
-          students: Math.min(targets.students, Math.floor((step / steps) * targets.students)),
-          courses: Math.min(targets.courses, Math.floor((step / steps) * targets.courses)),
-          certificates: Math.min(targets.certificates, Math.floor((step / steps) * targets.certificates)),
-          experts: Math.min(targets.experts, Math.floor((step / steps) * targets.experts))
+            const timer = setInterval(() => {
+              step++;
+              setCounters({
+                students: Math.min(targets.students, Math.floor((step / steps) * targets.students)),
+                courses: Math.min(targets.courses, Math.floor((step / steps) * targets.courses)),
+                certificates: Math.min(targets.certificates, Math.floor((step / steps) * targets.certificates)),
+                experts: Math.min(targets.experts, Math.floor((step / steps) * targets.experts))
+              });
+              if (step >= steps) clearInterval(timer);
+            }, interval);
+
+            observer.disconnect(); // run only once
+          }
         });
-        if (step >= steps) clearInterval(timer);
-      }, interval);
+      },
+      { threshold: 0.2 }
+    );
 
-      return () => clearInterval(timer);
+    if (heroRef.current) {
+      observer.observe(heroRef.current);
     }
-  }, [isVisible.hero]);
+
+    return () => observer.disconnect();
+  }, []);
 
   // ================= HOW LMS WORKS =================
   const studentSteps = [
@@ -223,7 +208,7 @@ const Middle = () => {
 
       {/* ================= HERO SECTION ================= */}
       <section 
-        ref={el => sectionRefs.current.hero = el}
+        ref={heroRef}
         className="relative bg-gradient-to-br from-black via-zinc-900 to-black text-white px-4 sm:px-6 lg:px-10 py-24 overflow-hidden"
       >
         {/* Animated Background Effects */}
@@ -236,7 +221,7 @@ const Middle = () => {
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:50px_50px]" />
         </div>
 
-        <div className={`relative max-w-7xl mx-auto grid lg:grid-cols-2 gap-14 items-center transition-all duration-1000 transform ${isVisible.hero ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+        <div className="relative max-w-7xl mx-auto grid lg:grid-cols-2 gap-14 items-center">
           {/* LEFT CONTENT */}
           <div>
             <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-5 py-2 text-sm font-medium mb-6 hover:scale-105 transition-all duration-300">
@@ -346,11 +331,8 @@ const Middle = () => {
       </section>
 
       {/* ================= HOW IT WORKS ================= */}
-      <section 
-        ref={el => sectionRefs.current.steps = el}
-        className="px-4 sm:px-6 lg:px-10 py-24 bg-gradient-to-b from-white to-zinc-50"
-      >
-        <div className={`max-w-7xl mx-auto transition-all duration-1000 transform ${isVisible.steps ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+      <section className="px-4 sm:px-6 lg:px-10 py-24 bg-gradient-to-b from-white to-zinc-50">
+        <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-full px-4 py-2 mb-4">
               <Zap size={16} className="text-purple-500" />
@@ -418,11 +400,8 @@ const Middle = () => {
       </section>
 
       {/* ================= FEATURES ================= */}
-      <section 
-        ref={el => sectionRefs.current.features = el}
-        className="bg-white px-4 sm:px-6 lg:px-10 py-24"
-      >
-        <div className={`max-w-7xl mx-auto transition-all duration-1000 transform ${isVisible.features ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+      <section className="bg-white px-4 sm:px-6 lg:px-10 py-24">
+        <div className="max-w-7xl mx-auto">
           <div className="mb-16">
             <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-full px-4 py-2 mb-4">
               <Sparkles size={16} className="text-blue-500" />
@@ -523,11 +502,8 @@ const Middle = () => {
       </section>
 
       {/* ================= CTA SECTION ================= */}
-      <section 
-        ref={el => sectionRefs.current.cta = el}
-        className="px-4 sm:px-6 lg:px-10 py-24"
-      >
-        <div className={`max-w-6xl mx-auto bg-gradient-to-br from-black to-zinc-900 rounded-[50px] p-12 sm:p-16 text-center text-white relative overflow-hidden transition-all duration-1000 transform ${isVisible.cta ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+      <section className="px-4 sm:px-6 lg:px-10 py-24">
+        <div className="max-w-6xl mx-auto bg-gradient-to-br from-black to-zinc-900 rounded-[50px] p-12 sm:p-16 text-center text-white relative overflow-hidden">
           {/* Animated Background */}
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-3xl animate-pulse-slow" />
