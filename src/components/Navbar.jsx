@@ -500,7 +500,6 @@
 
 
 
-
 import React, { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 
@@ -519,8 +518,11 @@ import {
   Bell,
   Shield,
   Sparkles,
-  Trophy,
-  Clock
+  ChevronRight,
+  ChevronLeft,
+  FileText,
+  MessageCircle,
+  LifeBuoy
 } from 'lucide-react'
 
 import API from "../utils/api"
@@ -556,6 +558,7 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false)
   const [notifications, setNotifications] = useState(0)
   const [notificationList, setNotificationList] = useState([])
+  const [mobileHelpOpen, setMobileHelpOpen] = useState(false)
 
   // ================= CHECK CURRENT PANEL =================
   const isAdminPanel = location.pathname.startsWith("/admin")
@@ -574,6 +577,7 @@ const Navbar = () => {
   // ================= CLOSE MOBILE MENU ON ROUTE CHANGE =================
   useEffect(() => {
     setIsMobileMenuOpen(false)
+    setMobileHelpOpen(false)
   }, [location.pathname])
 
   // ================= LOGOUT =================
@@ -628,8 +632,23 @@ const Navbar = () => {
     { path: "/about", label: "About", icon: BookA },
   ]
 
+  // ================= HELP SUBMENU ITEMS =================
+  const helpItems = [
+    { label: "Documentation", icon: <FileText size={18} />, onClick: () => navigate("/docs") },
+    { label: "FAQ", icon: <MessageCircle size={18} />, onClick: () => navigate("/faq") },
+    { label: "Contact Support", icon: <LifeBuoy size={18} />, onClick: () => navigate("/support") },
+  ]
+
   return (
     <>
+      {/* Overlay for mobile menu */}
+      {isMobileMenuOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-[490] md:hidden"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+
       <nav
         className={`
           fixed top-0 left-0 w-full z-[500]
@@ -837,21 +856,7 @@ const Navbar = () => {
 
                     <DropdownMenuSeparator className="bg-zinc-100" />
 
-                    {/* Stats Row */}
-                    <div className="flex items-center justify-around px-3 py-3 border-b border-zinc-100">
-                      <div className="text-center">
-                        <Trophy size={18} className="mx-auto text-yellow-500 mb-1" />
-                        <p className="text-xs text-zinc-500">Courses</p>
-                      </div>
-                      <div className="text-center">
-                        <Clock size={18} className="mx-auto text-blue-500 mb-1" />
-                        <p className="text-xs text-zinc-500">Hours</p>
-                      </div>
-                      <div className="text-center">
-                        <Sparkles size={18} className="mx-auto text-purple-500 mb-1" />
-                        <p className="text-xs text-zinc-500">Points</p>
-                      </div>
-                    </div>
+                    {/* Stats Row REMOVED */}
 
                     <DropdownMenuItem
                       onClick={() => navigate(dashboardRoute)}
@@ -938,19 +943,18 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* ================= MOBILE MENU ================= */}
+        {/* ================= ADVANCED MOBILE MENU ================= */}
         <div
           className={`
-            md:hidden overflow-hidden
-            transition-all duration-500 ease-in-out
-            ${isMobileMenuOpen
-              ? "max-h-[600px] opacity-100"
-              : "max-h-0 opacity-0"
-            }
+            fixed top-16 left-0 bottom-0 w-[300px] z-[500]
+            bg-white/95 backdrop-blur-xl shadow-2xl
+            transform transition-transform duration-500 ease-in-out
+            md:hidden
+            flex flex-col
+            ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}
           `}
         >
-          <div className="bg-white/95 backdrop-blur-xl border-t border-zinc-200 px-5 py-6">
-
+          <div className="flex-1 overflow-y-auto px-5 py-6">
             {user ? (
               <div className="flex flex-col gap-4">
 
@@ -980,22 +984,6 @@ const Navbar = () => {
                   </div>
                 </div>
 
-                {/* Stats Row for Mobile */}
-                <div className="flex items-center justify-around py-3 bg-zinc-50 rounded-2xl">
-                  <div className="text-center">
-                    <Trophy size={18} className="mx-auto text-yellow-500 mb-1" />
-                    <p className="text-xs text-zinc-500">Courses</p>
-                  </div>
-                  <div className="text-center">
-                    <Clock size={18} className="mx-auto text-blue-500 mb-1" />
-                    <p className="text-xs text-zinc-500">Hours</p>
-                  </div>
-                  <div className="text-center">
-                    <Sparkles size={18} className="mx-auto text-purple-500 mb-1" />
-                    <p className="text-xs text-zinc-500">Points</p>
-                  </div>
-                </div>
-
                 {/* MOBILE NAV ITEMS */}
                 {[
                   { icon: LayoutDashboard, label: user?.role === "admin" ? "Admin Dashboard" : "User Dashboard", route: dashboardRoute },
@@ -1013,7 +1001,7 @@ const Navbar = () => {
                   >
                     <item.icon size={20} className="text-zinc-500 group-hover:text-black transition-colors flex-shrink-0" />
                     <span className="flex-1 text-left">{item.label}</span>
-                    <span className="text-zinc-400 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+                    <ChevronRight size={16} className="text-zinc-400 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </button>
                 ))}
 
@@ -1037,10 +1025,46 @@ const Navbar = () => {
                   </div>
                 )}
 
+                {/* HELP & SUPPORT COLLAPSIBLE SECTION (ADVANCED) */}
+                <div className="border border-zinc-200 rounded-xl overflow-hidden">
+                  <button
+                    onClick={() => setMobileHelpOpen(!mobileHelpOpen)}
+                    className="flex items-center justify-between w-full px-4 py-3 text-left text-black font-medium hover:bg-zinc-50 transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <HelpCircle size={20} className="text-zinc-500" />
+                      <span>Help & Support</span>
+                    </div>
+                    <ChevronRight
+                      size={18}
+                      className={`text-zinc-400 transition-transform duration-300 ${mobileHelpOpen ? "rotate-90" : ""}`}
+                    />
+                  </button>
+                  <div
+                    className={`overflow-hidden transition-all duration-300 ${mobileHelpOpen ? "max-h-96" : "max-h-0"}`}
+                  >
+                    <div className="border-t border-zinc-100 bg-zinc-50/50">
+                      {helpItems.map((item, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => {
+                            item.onClick()
+                            setIsMobileMenuOpen(false)
+                          }}
+                          className="flex items-center gap-3 w-full px-4 py-3 text-left text-zinc-600 hover:bg-zinc-100 transition-colors"
+                        >
+                          {item.icon}
+                          <span className="text-sm">{item.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
                 {/* LOGOUT BUTTON */}
                 <button
                   onClick={logoutHandler}
-                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 font-medium hover:bg-red-50 transition-all duration-300 group w-full text-left"
+                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 font-medium hover:bg-red-50 transition-all duration-300 group w-full text-left mt-2"
                 >
                   <LogOut size={20} />
                   <span>Logout</span>
