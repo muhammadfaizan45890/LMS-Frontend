@@ -10,7 +10,7 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
-  ShieldCheck,
+  GraduationCap,
   BookKeyIcon,
   DollarSignIcon,
   BookCheck,
@@ -141,8 +141,8 @@ const UserSidebar = () => {
           {/* LEFT */}
           <div className="flex items-center gap-3">
             <div className="bg-black text-white p-2 rounded-xl">
-              <ShieldCheck size={20} />
-            </div>
+  <GraduationCap size={20} />
+</div>
 
             {!collapsed && (
               <div>
