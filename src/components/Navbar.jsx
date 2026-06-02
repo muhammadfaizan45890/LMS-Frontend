@@ -501,7 +501,6 @@
 
 
 
-
 import React, { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 
@@ -556,7 +555,7 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const [notifications, setNotifications] = useState(0)
-  const [notificationList, setNotificationList] = useState(0)
+  const [notificationList, setNotificationList] = useState([])
 
   // ================= CHECK CURRENT PANEL =================
   const isAdminPanel = location.pathname.startsWith("/admin")
@@ -604,6 +603,7 @@ const Navbar = () => {
 
   // ================= MARK NOTIFICATION AS READ =================
   const markAsRead = (id) => {
+    if (notificationList.length === 0) return
     setNotificationList(prev => prev.map(notif => 
       notif.id === id ? { ...notif, read: true } : notif
     ))
@@ -612,6 +612,7 @@ const Navbar = () => {
   }
 
   const markAllAsRead = () => {
+    if (notificationList.length === 0) return
     setNotificationList(prev => prev.map(notif => ({ ...notif, read: true })))
     setNotifications(0)
     toast.success("All notifications marked as read")
@@ -842,17 +843,14 @@ const Navbar = () => {
                       <div className="text-center">
                         <Trophy size={18} className="mx-auto text-yellow-500 mb-1" />
                         <p className="text-xs text-zinc-500">Courses</p>
-                        {/* <p className="text-sm font-bold text-black">12</p> */}
                       </div>
                       <div className="text-center">
                         <Clock size={18} className="mx-auto text-blue-500 mb-1" />
                         <p className="text-xs text-zinc-500">Hours</p>
-                        {/* <p className="text-sm font-bold text-black">48</p> */}
                       </div>
                       <div className="text-center">
                         <Sparkles size={18} className="mx-auto text-purple-500 mb-1" />
                         <p className="text-xs text-zinc-500">Points</p>
-                        {/* <p className="text-sm font-bold text-black">2,450</p> */}
                       </div>
                     </div>
 
@@ -875,15 +873,6 @@ const Navbar = () => {
                       <span className="flex-1">Profile Settings</span>
                       <span className="text-xs text-zinc-400 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
                     </DropdownMenuItem>
-
-                    {/* <DropdownMenuItem
-                      onClick={() => navigate(settingsRoute)}
-                      className="cursor-pointer rounded-xl py-3 px-3 hover:bg-zinc-100 transition-all duration-300 group"
-                    >
-                      <Settings className="mr-3 h-4 w-4 text-zinc-500 group-hover:text-black transition-colors" />
-                      <span className="flex-1">Account Settings</span>
-                      <span className="text-xs text-zinc-400 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-                    </DropdownMenuItem> */}
 
                     <DropdownMenuSub>
                       <DropdownMenuSubTrigger className="cursor-pointer rounded-xl py-3 px-3 hover:bg-zinc-100 transition-all duration-300">
@@ -937,12 +926,13 @@ const Navbar = () => {
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="md:hidden relative w-10 h-10 rounded-xl hover:bg-zinc-100 transition-all duration-300"
+              aria-label="Toggle menu"
             >
               <div className="absolute inset-0 flex items-center justify-center">
                 {isMobileMenuOpen ? (
-                  <X className="h-6 w-6 text-black animate-in zoom-in duration-300" />
+                  <X className="h-6 w-6 text-black" />
                 ) : (
-                  <Menu className="h-6 w-6 text-black animate-in zoom-in duration-300" />
+                  <Menu className="h-6 w-6 text-black" />
                 )}
               </div>
             </button>
@@ -996,17 +986,14 @@ const Navbar = () => {
                   <div className="text-center">
                     <Trophy size={18} className="mx-auto text-yellow-500 mb-1" />
                     <p className="text-xs text-zinc-500">Courses</p>
-                    {/* <p className="text-sm font-bold text-black">12</p> */}
                   </div>
                   <div className="text-center">
                     <Clock size={18} className="mx-auto text-blue-500 mb-1" />
                     <p className="text-xs text-zinc-500">Hours</p>
-                    {/* <p className="text-sm font-bold text-black">48</p> */}
                   </div>
                   <div className="text-center">
                     <Sparkles size={18} className="mx-auto text-purple-500 mb-1" />
                     <p className="text-xs text-zinc-500">Points</p>
-                    {/* <p className="text-sm font-bold text-black">2,450</p> */}
                   </div>
                 </div>
 
@@ -1017,11 +1004,13 @@ const Navbar = () => {
                   { icon: Settings, label: "Settings", route: settingsRoute },
                   { icon: Home, label: "Home", route: "/" },
                   { icon: BookA, label: "About", route: "/about" },
-                  // { icon: HelpCircle, label: "Help", route: "/help" },
                 ].map((item, idx) => (
                   <button
                     key={idx}
-                    onClick={() => navigate(item.route)}
+                    onClick={() => {
+                      navigate(item.route)
+                      setIsMobileMenuOpen(false)
+                    }}
                     className="flex items-center gap-3 px-4 py-3 rounded-xl text-black font-medium hover:bg-zinc-100 transition-all duration-300 group"
                   >
                     <item.icon size={20} className="text-zinc-500 group-hover:text-black transition-colors" />
@@ -1063,12 +1052,14 @@ const Navbar = () => {
               <div className="space-y-3">
                 <Link
                   to="/login"
+                  onClick={() => setIsMobileMenuOpen(false)}
                   className="block w-full text-center bg-gradient-to-r from-black to-zinc-800 text-white py-3 rounded-xl font-semibold transition-all duration-300 hover:shadow-lg"
                 >
                   Login
                 </Link>
                 <Link
                   to="/signup"
+                  onClick={() => setIsMobileMenuOpen(false)}
                   className="block w-full text-center border-2 border-black text-black py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-black hover:text-white"
                 >
                   Sign Up
