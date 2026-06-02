@@ -102,7 +102,7 @@ const UserDashboard = () => {
   const totalCourses = courses.length
 
   return (
-    <div className="min-h-screen bg-zinc-100">
+    <div className="min-h-screen mt-0 bg-zinc-100">
 
       {/* ================= HERO SECTION ================= */}
       <div className="relative overflow-hidden bg-black text-white">
