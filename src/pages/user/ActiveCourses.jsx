@@ -808,7 +808,7 @@ const ActiveCourses = () => {
   // ================= COURSE DETAILS PAGE =================
   if (selectedCourse && courseData) {
     return (
-      <div className="min-h-screen bg-zinc-100 overflow-x-hidden">
+      <div className="min-h-screen bg-zinc-100">
         {/* ================= HERO ================= */}
         <div className="relative overflow-hidden bg-black text-white">
           <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,_white,_transparent_35%)]" />
