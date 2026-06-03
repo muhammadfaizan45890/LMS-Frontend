@@ -212,7 +212,6 @@ const Video = () => {
     playerRef.current = event.target;
     setDuration(event.target.getDuration());
     setPlayerReady(true);
-    // start playing if autoplay was requested
     if (event.target.playVideo) {
       event.target.playVideo();
       setPlaying(true);
@@ -260,7 +259,6 @@ const Video = () => {
     return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
   };
 
-  // fullscreen
   const toggleFullscreen = () => {
     const container = document.getElementById("video-container");
     if (!container) return;
@@ -291,7 +289,7 @@ const Video = () => {
 
   return (
     <div className="min-h-screen bg-black flex flex-col items-center justify-center px-4 py-4 sm:py-6">
-      {/* Stop button – always accessible */}
+      {/* Stop button */}
       <div className="w-full max-w-7xl flex justify-start mb-4">
         <button
           onClick={() => navigate(-1)}
@@ -301,37 +299,38 @@ const Video = () => {
         </button>
       </div>
 
-      {/* Video container with fullscreen support */}
+      {/* Video container with fullscreen support and pointer-events: none to block touches on video */}
       <div
         id="video-container"
         className="w-full max-w-7xl aspect-video bg-black rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl border border-gray-800"
       >
-        {videoId && (
-          <YouTube
-            videoId={videoId}
-            className="w-full h-full"
-            opts={{
-              width: "100%",
-              height: "100%",
-              playerVars: {
-                autoplay: 1,
-                controls: 0,          // hide YouTube native controls
-                rel: 0,
-                modestbranding: 1,
-                fs: 0,                // we'll use our own fullscreen
-                disablekb: 1,
-                iv_load_policy: 3,
-              },
-            }}
-            onReady={onReady}
-          />
-        )}
+        <div className="w-full h-full pointer-events-none">
+          {videoId && (
+            <YouTube
+              videoId={videoId}
+              className="w-full h-full"
+              opts={{
+                width: "100%",
+                height: "100%",
+                playerVars: {
+                  autoplay: 1,
+                  controls: 0,          // hide native controls
+                  rel: 0,
+                  modestbranding: 1,
+                  fs: 0,                // use our own fullscreen
+                  disablekb: 1,         // disable keyboard
+                  iv_load_policy: 3,
+                },
+              }}
+              onReady={onReady}
+            />
+          )}
+        </div>
       </div>
 
-      {/* Custom controls – fully responsive */}
+      {/* Custom controls */}
       {playerReady && (
         <div className="w-full max-w-7xl mt-5 sm:mt-6 space-y-4">
-          {/* Progress bar + time */}
           <div className="flex items-center gap-3 flex-wrap">
             <input
               type="range"
@@ -350,7 +349,6 @@ const Video = () => {
             </div>
           </div>
 
-          {/* Control buttons */}
           <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
             <button
               onClick={backward10}
@@ -358,21 +356,18 @@ const Video = () => {
             >
               <span>⏪</span> 10s
             </button>
-
             <button
               onClick={handlePlayPause}
               className="flex items-center gap-1 px-6 py-2.5 sm:px-8 sm:py-3 bg-white text-black rounded-xl font-bold transition hover:bg-gray-200 text-base sm:text-lg"
             >
               {playing ? "⏸ Pause" : "▶ Play"}
             </button>
-
             <button
               onClick={forward10}
               className="flex items-center gap-1 px-4 py-2 sm:px-5 sm:py-2.5 bg-gray-800 hover:bg-gray-700 rounded-xl text-white font-medium transition text-sm sm:text-base"
             >
               10s <span>⏩</span>
             </button>
-
             <button
               onClick={toggleFullscreen}
               className="flex items-center gap-1 px-4 py-2 sm:px-5 sm:py-2.5 bg-gray-800 hover:bg-gray-700 rounded-xl text-white font-medium transition text-sm sm:text-base"
@@ -381,14 +376,12 @@ const Video = () => {
             </button>
           </div>
 
-          {/* Remaining time (optional) */}
           <div className="text-center text-xs text-gray-500">
             Remaining: {formatTime(duration - currentTime)}
           </div>
         </div>
       )}
 
-      {/* Loading indicator while player is not ready */}
       {!playerReady && videoId && (
         <div className="w-full max-w-7xl mt-5 text-center text-gray-400 text-sm animate-pulse">
           Loading player...
