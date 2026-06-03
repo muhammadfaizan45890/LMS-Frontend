@@ -67,7 +67,7 @@ const UserProfile = () => {
   // ================= LOADING STATE (no fade) =================
   if (loading) {
     return (
-      <div className="min-h-screen bg-zinc-100 flex items-center justify-center px-4 pt-14 sm:pt-16">
+      <div className="min-h-screen bg-zinc-100 flex items-center justify-center px-4">
         <div className="bg-white rounded-2xl sm:rounded-[32px] p-6 sm:p-10 shadow-xl border border-zinc-200 max-w-md w-full text-center">
           <div className="w-12 h-12 sm:w-20 sm:h-20 rounded-full border-4 border-zinc-200 border-t-black animate-spin mx-auto mb-4 sm:mb-6" />
           <h2 className="text-xl sm:text-2xl font-black text-zinc-900">Loading Profile</h2>
