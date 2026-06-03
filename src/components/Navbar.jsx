@@ -502,17 +502,22 @@
 
 
 
-import React, { useEffect, useState } from 'react';
-import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
+
 import {
   BookA,
   LogOut,
   User,
+  Menu,
+  X,
   LayoutDashboard,
   GraduationCap,
-  Home,
-} from 'lucide-react';
-import API from '../utils/api';
+  Home
+} from 'lucide-react'
+
+import API from "../utils/api"
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -520,92 +525,134 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { getData } from '@/context/userContext';
-import axios from 'axios';
-import { toast } from 'sonner';
+} from "@/components/ui/dropdown-menu"
+
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
+import { getData } from '@/context/userContext'
+
+import axios from 'axios'
+import { toast } from 'sonner'
 
 const Navbar = () => {
-  const { user, setUser } = getData();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const accessToken = localStorage.getItem('accessToken');
 
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
+  const { user, setUser } = getData()
 
-  const isAdminPanel = location.pathname.startsWith('/admin');
-  const isUserPanel = location.pathname.startsWith('/user');
+  const navigate = useNavigate()
+  const location = useLocation()
 
-  // Scroll effect
+  const accessToken = localStorage.getItem("accessToken")
+
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
+
+  // ================= CHECK CURRENT PANEL =================
+  const isAdminPanel = location.pathname.startsWith("/admin")
+  const isUserPanel = location.pathname.startsWith("/user")
+
+  // ================= SCROLL EFFECT =================
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 10);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10)
+    }
 
-  // Close mobile menu on route change
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
+  // ================= CLOSE MOBILE MENU ON ROUTE CHANGE =================
   useEffect(() => {
-    setIsMobileMenuOpen(false);
-  }, [location.pathname]);
+    setIsMobileMenuOpen(false)
+  }, [location.pathname])
 
-  // Lock body scroll when mobile menu is open
+  // ================= BODY SCROLL LOCK WHEN MOBILE MENU OPEN =================
   useEffect(() => {
     if (isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden'
     } else {
-      document.body.style.overflow = '';
+      document.body.style.overflow = ''
     }
     return () => {
-      document.body.style.overflow = '';
-    };
-  }, [isMobileMenuOpen]);
+      document.body.style.overflow = ''
+    }
+  }, [isMobileMenuOpen])
 
+  // ================= LOGOUT =================
   const logoutHandler = async () => {
     try {
       const res = await axios.post(
         `${API}/user/logout`,
         {},
-        { headers: { Authorization: `Bearer ${accessToken}` } }
-      );
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
+
       if (res.data.success) {
-        setUser(null);
-        localStorage.clear();
-        toast.success(res.data.message || 'Logged out successfully!');
-        navigate('/login');
+        setUser(null)
+        localStorage.clear()
+        toast.success(res.data.message || "Logged out successfully!")
+        navigate("/login")
       }
     } catch {
-      toast.error('Logout failed!');
+      toast.error("Logout failed!")
     }
-  };
+  }
 
+  // ================= DASHBOARD ROUTE =================
   const dashboardRoute =
-    user?.role === 'admin' ? '/admin/dashboard' : '/user/dashboard';
+    user?.role === "admin"
+      ? "/admin/dashboard"
+      : "/user/dashboard"
+
+  // ================= PROFILE ROUTE =================
   const profileRoute =
-    user?.role === 'admin' ? '/admin/profile' : '/user/profile';
+    user?.role === "admin"
+      ? "/admin/profile"
+      : "/user/profile"
 
   return (
     <nav
       className={`
         fixed top-0 left-0 w-full z-[500]
         transition-all duration-300 ease-out
+        mb-0 pb-0
         ${isScrolled
-          ? 'bg-white/90 backdrop-blur-md shadow-lg border-b border-zinc-100'
-          : 'bg-white border-b border-zinc-100'
+          ? "bg-white/90 backdrop-blur-md shadow-lg border-b border-zinc-100"
+          : "bg-white border-b border-zinc-100"
         }
       `}
     >
-      <div className="h-14 sm:h-16 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-        {/* Logo */}
+
+      {/* ================= CONTAINER ================= */}
+      <div
+        className="
+          h-14 sm:h-16
+          px-4 sm:px-6 lg:px-8
+          flex items-center justify-between
+        "
+      >
+
+        {/* ================= LEFT ================= */}
         <div className="flex items-center gap-3">
+
+          {/* LOGO with enhanced hover */}
           <Link
             to="/"
             className="flex items-center gap-2 group focus:outline-none focus-visible:ring-2 focus-visible:ring-black rounded-lg"
           >
-            <div className="bg-black text-white p-2 rounded-xl group-hover:scale-105 group-hover:rotate-1 transition-all duration-300">
+            <div
+              className="
+                bg-black text-white
+                p-2 rounded-xl
+                group-hover:scale-105 group-hover:rotate-1
+                transition-all duration-300
+              "
+            >
               <GraduationCap size={18} />
             </div>
+
             <div className="hidden sm:block">
               <h1 className="font-bold text-black text-lg leading-none tracking-tight">
                 Learning
@@ -616,33 +663,41 @@ const Navbar = () => {
             </div>
           </Link>
 
-          {/* Panel badge */}
+          {/* PANEL BADGE - enhanced styling */}
           {(isAdminPanel || isUserPanel) && (
             <div
               className={`
-                hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full
-                text-xs font-semibold backdrop-blur-sm transition-all
+                hidden md:flex
+                items-center gap-2
+                px-3 py-1.5 rounded-full
+                text-xs font-semibold
+                backdrop-blur-sm
+                transition-all
                 ${isAdminPanel
-                  ? 'bg-red-50 text-red-700 border border-red-200'
-                  : 'bg-blue-50 text-blue-700 border border-blue-200'
+                  ? "bg-red-50 text-red-700 border border-red-200"
+                  : "bg-blue-50 text-blue-700 border border-blue-200"
                 }
               `}
             >
               <LayoutDashboard size={14} strokeWidth={2} />
-              {isAdminPanel ? 'Admin Panel' : 'User Panel'}
+              {isAdminPanel ? "Admin Panel" : "User Panel"}
             </div>
           )}
         </div>
 
-        {/* Desktop Menu */}
+        {/* ================= DESKTOP MENU ================= */}
         <div className="hidden md:flex items-center gap-6">
+
+          {/* HOME with active state */}
           <NavLink
             to="/"
             className={({ isActive }) => `
-              flex items-center gap-2 transition-all duration-200 font-medium rounded-lg px-2 py-1
+              flex items-center gap-2
+              transition-all duration-200
+              font-medium rounded-lg px-2 py-1
               ${isActive
-                ? 'text-black bg-zinc-100'
-                : 'text-zinc-600 hover:text-black hover:bg-zinc-50'
+                ? "text-black bg-zinc-100"
+                : "text-zinc-600 hover:text-black hover:bg-zinc-50"
               }
             `}
           >
@@ -654,7 +709,14 @@ const Navbar = () => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button className="focus:outline-none focus-visible:ring-2 focus-visible:ring-black rounded-full transition-transform hover:scale-105">
-                  <Avatar className="cursor-pointer ring-2 ring-zinc-200 hover:ring-black transition-all duration-300">
+                  <Avatar
+                    className="
+                      cursor-pointer
+                      ring-2 ring-zinc-200
+                      hover:ring-black
+                      transition-all duration-300
+                    "
+                  >
                     <AvatarImage src={user?.avatar} />
                     <AvatarFallback className="bg-black text-white text-sm font-bold">
                       {user?.username?.slice(0, 2).toUpperCase()}
@@ -662,9 +724,16 @@ const Navbar = () => {
                   </Avatar>
                 </button>
               </DropdownMenuTrigger>
+
               <DropdownMenuContent
                 align="end"
-                className="w-64 rounded-2xl border border-zinc-100 bg-white shadow-xl p-2 mt-3 animate-in fade-in-0 zoom-in-95"
+                className="
+                  w-64 rounded-2xl
+                  border border-zinc-100 bg-white shadow-xl
+                  p-2
+                  mt-3
+                  animate-in fade-in-0 zoom-in-95
+                "
               >
                 <DropdownMenuLabel className="pb-3">
                   <div className="flex items-center gap-3">
@@ -675,21 +744,26 @@ const Navbar = () => {
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <h1 className="font-semibold text-black">{user?.username}</h1>
+                      <h1 className="font-semibold text-black">
+                        {user?.username}
+                      </h1>
                       <p className="text-xs text-zinc-500 capitalize font-medium">
                         {user?.role}
                       </p>
                     </div>
                   </div>
                 </DropdownMenuLabel>
+
                 <DropdownMenuSeparator className="bg-zinc-100" />
+
                 <DropdownMenuItem
                   onClick={() => navigate(dashboardRoute)}
                   className="cursor-pointer rounded-xl py-3 px-3 focus:bg-zinc-100 transition-colors"
                 >
                   <LayoutDashboard className="mr-2 h-4 w-4" strokeWidth={1.8} />
-                  {user?.role === 'admin' ? 'Admin Dashboard' : 'User Dashboard'}
+                  {user?.role === "admin" ? "Admin Dashboard" : "User Dashboard"}
                 </DropdownMenuItem>
+
                 <DropdownMenuItem
                   onClick={() => navigate(profileRoute)}
                   className="cursor-pointer rounded-xl py-3 px-3 focus:bg-zinc-100 transition-colors"
@@ -697,17 +771,24 @@ const Navbar = () => {
                   <User className="mr-2 h-4 w-4" strokeWidth={1.8} />
                   Profile
                 </DropdownMenuItem>
+
                 <DropdownMenuItem
-                  onClick={() => navigate('/about')}
+                  onClick={() => navigate("/about")}
                   className="cursor-pointer rounded-xl py-3 px-3 focus:bg-zinc-100 transition-colors"
                 >
                   <BookA className="mr-2 h-4 w-4" strokeWidth={1.8} />
                   About
                 </DropdownMenuItem>
+
                 <DropdownMenuSeparator className="bg-zinc-100" />
+
                 <DropdownMenuItem
                   onClick={logoutHandler}
-                  className="cursor-pointer rounded-xl py-3 px-3 text-red-600 focus:text-red-600 focus:bg-red-50 transition-colors"
+                  className="
+                    cursor-pointer rounded-xl py-3 px-3
+                    text-red-600 focus:text-red-600 focus:bg-red-50
+                    transition-colors
+                  "
                 >
                   <LogOut className="mr-2 h-4 w-4" strokeWidth={1.8} />
                   Logout
@@ -717,58 +798,57 @@ const Navbar = () => {
           ) : (
             <Link
               to="/login"
-              className="px-5 py-2.5 rounded-xl bg-black text-white hover:bg-zinc-800 hover:scale-[0.98] transition-all duration-200 font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-black"
+              className="
+                px-5 py-2.5 rounded-xl
+                bg-black text-white
+                hover:bg-zinc-800 hover:scale-[0.98]
+                transition-all duration-200 font-medium
+                focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-black
+              "
             >
               Login
             </Link>
           )}
         </div>
 
-        {/* ========== ADVANCED HAMBURGER (Three Bar Icon) ========== */}
+        {/* ================= MOBILE TOGGLE BUTTON ================= */}
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-label="Toggle menu"
           aria-expanded={isMobileMenuOpen}
-          className="md:hidden relative w-8 h-8 flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-black rounded-lg"
+          className="
+            md:hidden
+            text-black
+            hover:text-zinc-600
+            transition-all duration-200
+            p-1 rounded-lg
+            focus:outline-none focus-visible:ring-2 focus-visible:ring-black
+          "
         >
-          <div className="relative w-5 h-5">
-            <span
-              className={`
-                absolute h-0.5 w-5 bg-black rounded-full transition-all duration-300 ease-out
-                ${isMobileMenuOpen ? 'rotate-45 top-2' : 'top-0'}
-              `}
-            />
-            <span
-              className={`
-                absolute h-0.5 w-5 bg-black rounded-full transition-all duration-300 ease-out top-2
-                ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'}
-              `}
-            />
-            <span
-              className={`
-                absolute h-0.5 w-5 bg-black rounded-full transition-all duration-300 ease-out
-                ${isMobileMenuOpen ? '-rotate-45 top-2' : 'top-4'}
-              `}
-            />
-          </div>
+          {isMobileMenuOpen ? (
+            <X className="h-7 w-7 transition-transform rotate-0" />
+          ) : (
+            <Menu className="h-7 w-7 transition-transform" />
+          )}
         </button>
       </div>
 
-      {/* Mobile Menu Dropdown – Advanced Slide & Fade */}
+      {/* ================= MOBILE MENU (SLIDE DOWN) ================= */}
       <div
         className={`
-          md:hidden overflow-hidden transition-all duration-400 ease-[cubic-bezier(0.25,0.1,0.25,1)]
+          md:hidden overflow-hidden
+          transition-all duration-300 ease-in-out
           bg-white border-t border-zinc-100
           ${isMobileMenuOpen
-            ? 'max-h-[600px] opacity-100 shadow-lg translate-y-0'
-            : 'max-h-0 opacity-0 -translate-y-2'
+            ? "max-h-[600px] opacity-100 shadow-lg"
+            : "max-h-0 opacity-0"
           }
         `}
       >
         <div className="px-5 py-6 space-y-6">
           {user ? (
             <div className="flex flex-col gap-5">
-              {/* User info */}
+              {/* USER INFO with improved styling */}
               <div className="flex items-center gap-3 pb-2 border-b border-zinc-100">
                 <Avatar className="h-12 w-12 ring-2 ring-zinc-100">
                   <AvatarImage src={user?.avatar} />
@@ -777,61 +857,98 @@ const Navbar = () => {
                   </AvatarFallback>
                 </Avatar>
                 <div>
-                  <h1 className="font-bold text-black text-base">{user?.username}</h1>
+                  <h1 className="font-bold text-black text-base">
+                    {user?.username}
+                  </h1>
                   <p className="text-sm text-zinc-500 capitalize font-medium">
                     {user?.role}
                   </p>
                 </div>
               </div>
 
-              {/* Mobile panel badge */}
+              {/* PANEL BADGE for mobile */}
               {(isAdminPanel || isUserPanel) && (
                 <div
                   className={`
-                    flex items-center justify-center gap-2 py-2 rounded-full text-xs font-semibold
+                    flex items-center justify-center gap-2
+                    py-2 rounded-full text-xs font-semibold
                     ${isAdminPanel
-                      ? 'bg-red-50 text-red-700 border border-red-200'
-                      : 'bg-blue-50 text-blue-700 border border-blue-200'
+                      ? "bg-red-50 text-red-700 border border-red-200"
+                      : "bg-blue-50 text-blue-700 border border-blue-200"
                     }
                   `}
                 >
                   <LayoutDashboard size={14} strokeWidth={2} />
-                  {isAdminPanel ? 'Admin Panel' : 'User Panel'}
+                  {isAdminPanel ? "Admin Panel" : "User Panel"}
                 </div>
               )}
 
-              {/* Navigation links */}
+              {/* MOBILE NAVIGATION LINKS */}
               <button
-                onClick={() => navigate('/')}
-                className="flex items-center gap-3 text-black font-medium py-2 px-2 rounded-xl hover:bg-zinc-50 transition-all duration-200"
+                onClick={() => navigate("/")}
+                className="
+                  flex items-center gap-3
+                  text-black font-medium
+                  py-2 px-2 rounded-xl
+                  hover:bg-zinc-50
+                  transition-all duration-200
+                "
               >
                 <Home size={20} strokeWidth={1.8} />
                 Home
               </button>
+
               <button
                 onClick={() => navigate(dashboardRoute)}
-                className="flex items-center gap-3 text-black font-medium py-2 px-2 rounded-xl hover:bg-zinc-50 transition-all duration-200"
+                className="
+                  flex items-center gap-3
+                  text-black font-medium
+                  py-2 px-2 rounded-xl
+                  hover:bg-zinc-50
+                  transition-all duration-200
+                "
               >
                 <LayoutDashboard size={20} strokeWidth={1.8} />
-                {user?.role === 'admin' ? 'Admin Dashboard' : 'User Dashboard'}
+                {user?.role === "admin" ? "Admin Dashboard" : "User Dashboard"}
               </button>
+
               <button
                 onClick={() => navigate(profileRoute)}
-                className="flex items-center gap-3 text-black font-medium py-2 px-2 rounded-xl hover:bg-zinc-50 transition-all duration-200"
+                className="
+                  flex items-center gap-3
+                  text-black font-medium
+                  py-2 px-2 rounded-xl
+                  hover:bg-zinc-50
+                  transition-all duration-200
+                "
               >
                 <User size={20} strokeWidth={1.8} />
                 Profile
               </button>
+
               <button
-                onClick={() => navigate('/about')}
-                className="flex items-center gap-3 text-black font-medium py-2 px-2 rounded-xl hover:bg-zinc-50 transition-all duration-200"
+                onClick={() => navigate("/about")}
+                className="
+                  flex items-center gap-3
+                  text-black font-medium
+                  py-2 px-2 rounded-xl
+                  hover:bg-zinc-50
+                  transition-all duration-200
+                "
               >
                 <BookA size={20} strokeWidth={1.8} />
                 About
               </button>
+
               <button
                 onClick={logoutHandler}
-                className="flex items-center gap-3 text-red-600 font-medium py-2 px-2 rounded-xl hover:bg-red-50 transition-all duration-200"
+                className="
+                  flex items-center gap-3
+                  text-red-600 font-medium
+                  py-2 px-2 rounded-xl
+                  hover:bg-red-50
+                  transition-all duration-200
+                "
               >
                 <LogOut size={20} strokeWidth={1.8} />
                 Logout
@@ -840,7 +957,14 @@ const Navbar = () => {
           ) : (
             <Link
               to="/login"
-              className="block w-full text-center bg-black text-white py-3.5 rounded-xl font-medium hover:bg-zinc-800 hover:scale-[0.99] transition-all duration-200"
+              className="
+                block w-full text-center
+                bg-black text-white
+                py-3.5 rounded-xl
+                font-medium
+                hover:bg-zinc-800 hover:scale-[0.99]
+                transition-all duration-200
+              "
             >
               Login
             </Link>
@@ -848,7 +972,7 @@ const Navbar = () => {
         </div>
       </div>
     </nav>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar
