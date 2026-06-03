@@ -599,7 +599,7 @@ const RefundRequest = () => {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-100 overflow-hidden pt-14 sm:pt-16">
+    <div className="min-h-screen bg-zinc-100 overflow-hidden">
       {/* ================= HERO ================= */}
       <section className="relative bg-black text-white overflow-hidden">
         <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,white,transparent_35%)]" />
