@@ -597,7 +597,7 @@ const ApplyCertificate = () => {
       fetchApplications();
     } catch (error) {
       console.log(error);
-      alert("Failed to submit application");
+      alert("Course time isn't completed");
     } finally {
       setSubmitting(false);
     }
