@@ -197,8 +197,8 @@ import {
 } from "lucide-react";
 
 const LMSGuide = () => {
-  const paymentNumber = "03204606482";
-  const whatsappNumber = "03204606482";
+  const paymentNumber = "03214320946";
+  const whatsappNumber = "03214320946";
 
   return (
     <div className="min-h-screen bg-zinc-100 overflow-x-hidden">
