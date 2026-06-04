@@ -11,6 +11,7 @@ import {
   ChevronLeft,
   ChevronRight,
   GraduationCap,
+  Map,
   BookKeyIcon,
   DollarSignIcon,
   BookCheck,
@@ -83,7 +84,7 @@ const UserSidebar = () => {
     },
     {
       title: "LMS Guide",
-      icon: <BookKeyIcon size={20} />,
+      icon: <Map size={20} />,
       path: "/user/guide"
     },
 
