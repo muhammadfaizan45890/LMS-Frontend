@@ -346,7 +346,6 @@ import {
   Clock,
   CheckCircle2,
   Activity,
-  LucideIcon,
 } from "lucide-react";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
@@ -356,7 +355,7 @@ import { useNavigate } from "react-router-dom";
 import { getData } from "@/context/userContext";
 
 // ------------------------------------------------------------------
-// Custom hook for mouse position (for advanced cursor glow effect)
+// Hook: mouse position for dynamic glow effect
 // ------------------------------------------------------------------
 const useMousePosition = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -374,7 +373,7 @@ const useMousePosition = () => {
 };
 
 // ------------------------------------------------------------------
-// Floating Particle Component (CSS-driven, no fade-in)
+// Floating particle (CSS-driven, no JavaScript animation)
 // ------------------------------------------------------------------
 const FloatingParticle = ({ delay, duration, size, left, top }: any) => (
   <div
@@ -400,9 +399,9 @@ const Hero = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [buttonState, setButtonState] = useState<"idle" | "loading" | "exploring">("idle");
   const heroRef = useRef<HTMLDivElement>(null);
-  const { mousePosition, setIsHoveringHero } = useMousePosition();
+  const { mousePosition, isHoveringHero, setIsHoveringHero } = useMousePosition();
 
-  // Button Handlers
+  // Button handlers
   const handleGetStarted = () => {
     setButtonState("loading");
     setTimeout(() => {
@@ -422,7 +421,7 @@ const Hero = () => {
     }, 500);
   };
 
-  // Parallax background effect (scroll-based movement, no fade)
+  // Parallax background effect (scroll movement, no fade)
   useEffect(() => {
     const handleScroll = () => {
       const scrolled = window.scrollY;
@@ -436,13 +435,13 @@ const Hero = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Advanced mouse follower glow (only when hovering hero)
+  // Dynamic glow style (follows mouse)
   const followerGlowStyle = {
     left: `${mousePosition.x - 150}px`,
     top: `${mousePosition.y - 150}px`,
   };
 
-  // Dashboard preview interactive stats data
+  // Dashboard stats data
   const dashboardStats = [
     { label: "AI Sessions", value: "48", icon: BrainCircuit, change: "+12%", color: "from-black to-zinc-700" },
     { label: "Modules Done", value: "8/12", icon: CheckCircle2, change: "66%", color: "from-zinc-700 to-zinc-900" },
@@ -465,7 +464,7 @@ const Hero = () => {
         />
       )}
 
-      {/* Animated gradient mesh (slow shift) */}
+      {/* Animated gradient mesh */}
       <div className="absolute inset-0 overflow-hidden">
         <div
           className="absolute inset-0 opacity-30 animate-gradient-shift"
@@ -475,7 +474,7 @@ const Hero = () => {
         />
       </div>
 
-      {/* Parallax blobs with smooth floating animations */}
+      {/* Parallax blobs with floating animations */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="parallax-bg absolute top-[-150px] left-[-150px] w-[450px] h-[450px] bg-gradient-to-r from-zinc-300/30 to-zinc-500/20 rounded-full blur-[130px] animate-float-slow" />
         <div className="parallax-bg absolute bottom-[-180px] right-[-150px] w-[500px] h-[500px] bg-gradient-to-l from-zinc-400/30 to-zinc-600/20 rounded-full blur-[150px] animate-float-reverse" />
@@ -484,12 +483,12 @@ const Hero = () => {
         <div className="absolute bottom-[15%] right-[5%] w-80 h-80 bg-zinc-800/5 rounded-full blur-[100px] animate-pulse-slower" />
       </div>
 
-      {/* Animated grid pattern with moving lines */}
+      {/* Animated grid pattern */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000008_1px,transparent_1px),linear-gradient(to_bottom,#00000008_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,black_40%,transparent_100%)]">
         <div className="absolute inset-0 bg-gradient-to-t from-transparent via-zinc-100/5 to-transparent animate-grid-shift" />
       </div>
 
-      {/* Floating particle system (CSS-only) */}
+      {/* Floating particles (pure CSS) */}
       <FloatingParticle delay={0} duration={18} size="120px" left={15} top={70} />
       <FloatingParticle delay={2} duration={25} size="90px" left={85} top={20} />
       <FloatingParticle delay={5} duration={22} size="150px" left={45} top={85} />
@@ -499,9 +498,9 @@ const Hero = () => {
       {/* ================= MAIN CONTENT ================= */}
       <section className="relative z-10 w-full min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 items-center">
-          {/* ================= LEFT CONTENT ================= */}
+          {/* LEFT COLUMN: Text & CTA */}
           <div className="flex flex-col items-center lg:items-start text-center lg:text-left space-y-6 sm:space-y-8">
-            {/* USER INFO with enhanced hover */}
+            {/* User info (if logged in) */}
             {user && (
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 sm:gap-4">
                 <div className="flex items-center gap-3 bg-white/90 backdrop-blur-md border border-zinc-200/80 shadow-xl rounded-full px-4 sm:px-5 py-2 hover:shadow-2xl transition-all duration-300 hover:scale-[1.02]">
@@ -530,7 +529,7 @@ const Hero = () => {
               </div>
             )}
 
-            {/* BADGE with interactive shine */}
+            {/* Badge with shine effect */}
             <div className="group relative transform hover:scale-105 transition-transform duration-300">
               <Badge className="bg-gradient-to-r from-black to-zinc-800 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-[11px] sm:text-sm font-semibold shadow-2xl border border-zinc-700/50 overflow-hidden relative">
                 <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
@@ -539,7 +538,7 @@ const Hero = () => {
               </Badge>
             </div>
 
-            {/* HEADING – premium typography */}
+            {/* Main headline */}
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-[1.1] sm:leading-tight tracking-tighter">
               Intelligent
               <span className="block bg-gradient-to-r from-zinc-900 via-zinc-700 to-zinc-900 bg-clip-text text-transparent mt-1 sm:mt-2">
@@ -550,7 +549,7 @@ const Hero = () => {
               </span>
             </h1>
 
-            {/* DESCRIPTION with subtle border accent */}
+            {/* Description with left border accent */}
             <p className="max-w-2xl text-zinc-600 text-sm sm:text-base md:text-lg leading-relaxed sm:leading-relaxed border-l-4 border-black/20 pl-4 sm:pl-5">
               Experience a modern AI-powered platform that helps students
               learn smarter, stay organized, and access secure educational
@@ -558,7 +557,7 @@ const Hero = () => {
               for productivity and growth.
             </p>
 
-            {/* BUTTONS – enhanced hover & micro-interactions */}
+            {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto pt-2 sm:pt-4">
               {/* Get Started Button */}
               <div className="relative group">
@@ -622,7 +621,7 @@ const Hero = () => {
               </div>
             </div>
 
-            {/* TRUST LINE – enhanced hover states */}
+            {/* Trust indicators with tooltip on hover */}
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 sm:gap-6 pt-4 sm:pt-6">
               {[
                 { icon: ShieldCheck, label: "Secure Platform", description: "Enterprise-grade" },
@@ -634,7 +633,6 @@ const Hero = () => {
                     <item.icon size={14} className="sm:w-[18px] sm:h-[18px] transition-transform group-hover:scale-110 duration-300" />
                   </div>
                   <span className="font-medium group-hover:text-black transition-colors">{item.label}</span>
-                  {/* Tooltip-like description on hover */}
                   <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] px-2 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
                     {item.description}
                   </span>
@@ -643,11 +641,10 @@ const Hero = () => {
             </div>
           </div>
 
-          {/* ================= RIGHT SIDE – ADVANCED DASHBOARD PREVIEW ================= */}
+          {/* RIGHT COLUMN: Dashboard Preview Card */}
           <div className="relative flex justify-center mt-8 lg:mt-0 group/dashboard">
-            {/* 3D-like hover effect container */}
             <div className="relative w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl rounded-[32px] bg-white/90 backdrop-blur-xl border border-zinc-200/60 shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-[1.02] overflow-hidden">
-              {/* Top bar with animated gradient */}
+              {/* Mock window top bar */}
               <div className="flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-3 sm:py-5 border-b border-zinc-200/50 bg-gradient-to-r from-white/80 to-zinc-50/80">
                 <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-red-400/80 hover:bg-red-500 transition-colors" />
                 <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-yellow-400/80 hover:bg-yellow-500 transition-colors" />
@@ -660,9 +657,8 @@ const Hero = () => {
                 </div>
               </div>
 
-              {/* Dashboard Content */}
+              {/* Dashboard content */}
               <div className="p-5 sm:p-6 md:p-8">
-                {/* Header with dynamic greeting */}
                 <div className="flex items-center justify-between gap-3 sm:gap-4 mb-6 sm:mb-8">
                   <div>
                     <h2 className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-zinc-800 to-zinc-600 bg-clip-text text-transparent">
@@ -677,7 +673,7 @@ const Hero = () => {
                   </div>
                 </div>
 
-                {/* Stats cards grid (dynamic values) */}
+                {/* Stats cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
                   {dashboardStats.map((stat, idx) => (
                     <div
@@ -694,9 +690,8 @@ const Hero = () => {
                   ))}
                 </div>
 
-                {/* Feature Cards Grid */}
+                {/* Feature grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-                  {/* Card 1 - Video Learning */}
                   <div className="group/card bg-gradient-to-br from-zinc-50 to-white border border-zinc-200 rounded-2xl sm:rounded-3xl p-4 sm:p-5 md:p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-default relative overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-r from-black/0 to-black/5 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500" />
                     <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-xl sm:rounded-2xl bg-gradient-to-br from-black to-zinc-800 text-white flex items-center justify-center mb-3 sm:mb-4 shadow-md group-hover/card:shadow-xl transition-all">
@@ -708,7 +703,6 @@ const Hero = () => {
                     </p>
                   </div>
 
-                  {/* Card 2 - Secure Access */}
                   <div className="group/card bg-gradient-to-br from-zinc-50 to-white border border-zinc-200 rounded-2xl sm:rounded-3xl p-4 sm:p-5 md:p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-default relative overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-r from-black/0 to-black/5 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500" />
                     <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-xl sm:rounded-2xl bg-gradient-to-br from-black to-zinc-800 text-white flex items-center justify-center mb-3 sm:mb-4 shadow-md group-hover/card:shadow-xl transition-all">
@@ -720,7 +714,6 @@ const Hero = () => {
                     </p>
                   </div>
 
-                  {/* Card 3 - Full width AI Status */}
                   <div className="sm:col-span-2 bg-gradient-to-r from-black to-zinc-800 text-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 md:p-6 hover:shadow-2xl transition-all duration-300 hover:scale-[1.01] cursor-default relative overflow-hidden group/ai">
                     <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover/ai:opacity-100 transition-opacity duration-700" />
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-6">
@@ -740,7 +733,7 @@ const Hero = () => {
                   </div>
                 </div>
 
-                {/* Progress Section with hover detail */}
+                {/* Progress bar with micro-interactions */}
                 <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-zinc-200/50">
                   <div className="flex justify-between items-center mb-2 group/progress">
                     <span className="text-[10px] sm:text-xs text-zinc-500 font-medium flex items-center gap-2">
@@ -765,7 +758,7 @@ const Hero = () => {
               </div>
             </div>
 
-            {/* Floating NEW badge with advanced pulse */}
+            {/* Floating "LIVE" badge */}
             <div className="absolute -top-3 -right-3 sm:-top-4 sm:-right-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-[10px] sm:text-xs font-bold px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full shadow-2xl animate-bounce-slow z-20 backdrop-blur-sm">
               ✨ LIVE
             </div>
@@ -773,7 +766,7 @@ const Hero = () => {
         </div>
       </section>
 
-      {/* ================= ADVANCED CSS ANIMATIONS ================= */}
+      {/* ================= CUSTOM CSS ANIMATIONS ================= */}
       <style jsx>{`
         @keyframes float-particle {
           0%, 100% { transform: translate(0, 0) rotate(0deg); }
