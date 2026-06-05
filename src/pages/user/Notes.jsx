@@ -162,33 +162,21 @@
 
 
 
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Document, Page, pdfjs } from "react-pdf";
 import {
   FileText,
   Download,
   BookOpen,
   X,
-  ChevronLeft,
-  ChevronRight,
-  AlertCircle,
 } from "lucide-react";
 import API from "../../utils/api";
-
-// Set up PDF.js worker (using CDN for simplicity)
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const Notes = () => {
   const [courses, setCourses] = useState([]);
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedPdf, setSelectedPdf] = useState(null); // { url, title }
-  const [numPages, setNumPages] = useState(null);
-  const [pageNumber, setPageNumber] = useState(1);
-  const [pdfLoading, setPdfLoading] = useState(false);
-  const [pdfError, setPdfError] = useState(false);
 
   const userId = localStorage.getItem("userId");
 
@@ -236,35 +224,13 @@ const Notes = () => {
     }
   }, [courses, userId]);
 
-  // Open modal and reset PDF state
   const openPdfViewer = (pdfUrl, title) => {
     setSelectedPdf({ url: pdfUrl, title });
-    setPageNumber(1);
-    setNumPages(null);
-    setPdfError(false);
-    setPdfLoading(true);
   };
 
   const closePdfViewer = () => {
     setSelectedPdf(null);
-    setNumPages(null);
-    setPdfError(false);
   };
-
-  const onDocumentLoadSuccess = ({ numPages }) => {
-    setNumPages(numPages);
-    setPdfLoading(false);
-    setPdfError(false);
-  };
-
-  const onDocumentLoadError = (error) => {
-    console.error("PDF load error:", error);
-    setPdfLoading(false);
-    setPdfError(true);
-  };
-
-  const goToPrevPage = () => setPageNumber((prev) => Math.max(prev - 1, 1));
-  const goToNextPage = () => setPageNumber((prev) => Math.min(prev + 1, numPages));
 
   return (
     <div className="min-h-screen bg-zinc-100 p-4 md:p-8">
@@ -325,10 +291,16 @@ const Notes = () => {
         </div>
       )}
 
-      {/* PDF Modal */}
+      {/* PDF Modal with iframe - no external libraries */}
       {selectedPdf && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="relative bg-white rounded-3xl w-full max-w-5xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+          onClick={closePdfViewer}
+        >
+          <div
+            className="relative bg-white rounded-3xl w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl"
+            onClick={(e) => e.stopPropagation()} // prevent closing when clicking inside modal
+          >
             {/* Modal Header */}
             <div className="flex items-center justify-between border-b p-4 bg-white sticky top-0 z-10">
               <h2 className="text-lg font-bold truncate pr-4">
@@ -342,63 +314,15 @@ const Notes = () => {
               </button>
             </div>
 
-            {/* PDF Viewer Body */}
-            <div className="flex-1 overflow-auto p-4 bg-gray-100 flex flex-col items-center">
-              {pdfLoading && (
-                <div className="flex flex-col items-center justify-center py-20">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black mb-4"></div>
-                  <p className="text-gray-600">Loading PDF...</p>
-                </div>
-              )}
-              {pdfError && (
-                <div className="flex flex-col items-center justify-center py-20 text-red-600">
-                  <AlertCircle size={48} />
-                  <p className="mt-2 font-semibold">Failed to load PDF</p>
-                  <p className="text-sm text-gray-500">
-                    Please try again later or contact support.
-                  </p>
-                </div>
-              )}
-              {!pdfError && (
-                <Document
-                  file={selectedPdf.url}
-                  onLoadSuccess={onDocumentLoadSuccess}
-                  onLoadError={onDocumentLoadError}
-                  loading={null} // we handle loading ourselves
-                >
-                  <Page
-                    pageNumber={pageNumber}
-                    renderTextLayer={false}
-                    renderAnnotationLayer={false}
-                    className="shadow-lg"
-                    scale={1.2}
-                  />
-                </Document>
-              )}
+            {/* PDF Viewer Body - uses native iframe */}
+            <div className="flex-1 overflow-auto bg-gray-100">
+              <iframe
+                src={`${selectedPdf.url}#toolbar=1&navpanes=1&scrollbar=1`}
+                title={selectedPdf.title}
+                className="w-full h-full min-h-[500px]"
+                style={{ border: "none" }}
+              />
             </div>
-
-            {/* Pagination Controls (only if PDF loaded successfully) */}
-            {numPages && !pdfError && (
-              <div className="border-t p-3 bg-white flex items-center justify-between gap-2 text-sm">
-                <button
-                  onClick={goToPrevPage}
-                  disabled={pageNumber <= 1}
-                  className="p-2 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 transition"
-                >
-                  <ChevronLeft size={20} />
-                </button>
-                <span className="font-medium">
-                  Page {pageNumber} of {numPages}
-                </span>
-                <button
-                  onClick={goToNextPage}
-                  disabled={pageNumber >= numPages}
-                  className="p-2 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 transition"
-                >
-                  <ChevronRight size={20} />
-                </button>
-              </div>
-            )}
           </div>
         </div>
       )}
