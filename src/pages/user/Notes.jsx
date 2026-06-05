@@ -176,11 +176,10 @@ const Notes = () => {
   const [courses, setCourses] = useState([]);
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedPdf, setSelectedPdf] = useState(null); // { url, title }
+  const [selectedPdf, setSelectedPdf] = useState(null);
 
   const userId = localStorage.getItem("userId");
 
-  // Fetch active courses
   useEffect(() => {
     const fetchCourses = async () => {
       try {
@@ -196,7 +195,6 @@ const Notes = () => {
     if (userId) fetchCourses();
   }, [userId]);
 
-  // Fetch notes for all active courses
   useEffect(() => {
     const fetchNotes = async () => {
       try {
@@ -233,7 +231,7 @@ const Notes = () => {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-100 p-4 md:p-8">
+    <div className="h-full bg-zinc-100 p-4 md:p-8 overflow-auto">
       {/* Header */}
       <div className="flex items-center gap-3 mb-8">
         <div className="bg-black text-white p-3 rounded-2xl">
@@ -247,7 +245,6 @@ const Notes = () => {
         </div>
       </div>
 
-      {/* Loading state */}
       {loading ? (
         <div className="text-center py-20 text-xl font-semibold">
           Loading Notes...
@@ -291,17 +288,16 @@ const Notes = () => {
         </div>
       )}
 
-      {/* PDF Modal with iframe - no external libraries */}
+      {/* PDF Modal - no download option */}
       {selectedPdf && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
           onClick={closePdfViewer}
         >
           <div
             className="relative bg-white rounded-3xl w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl"
-            onClick={(e) => e.stopPropagation()} // prevent closing when clicking inside modal
+            onClick={(e) => e.stopPropagation()}
           >
-            {/* Modal Header */}
             <div className="flex items-center justify-between border-b p-4 bg-white sticky top-0 z-10">
               <h2 className="text-lg font-bold truncate pr-4">
                 {selectedPdf.title}
@@ -314,10 +310,10 @@ const Notes = () => {
               </button>
             </div>
 
-            {/* PDF Viewer Body - uses native iframe */}
             <div className="flex-1 overflow-auto bg-gray-100">
               <iframe
-                src={`${selectedPdf.url}#toolbar=1&navpanes=1&scrollbar=1`}
+                // Removed toolbar to hide download button
+                src={`${selectedPdf.url}#toolbar=0`}
                 title={selectedPdf.title}
                 className="w-full h-full min-h-[500px]"
                 style={{ border: "none" }}
