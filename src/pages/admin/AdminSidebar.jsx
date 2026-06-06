@@ -79,11 +79,6 @@ const AdminSidebar = () => {
       title: "Upload Notes",
       icon: <Book size={20} />,
       path: "/admin/notes"
-    },
-    {
-      title: "Settings",
-      icon: <Settings size={20} />,
-      path: "/admin/settings"
     }
   ]
 
