@@ -3,7 +3,8 @@ import {
   createBrowserRouter,
   RouterProvider,
   Outlet,
-  Navigate
+  Navigate,
+  useLocation,
 } from "react-router-dom";
 
 import "../src/index.css";
@@ -44,13 +45,29 @@ import AdminRefund from "./pages/admin/AdminRefund";
 import About from "./pages/user/About";
 import Notes from "./pages/user/Notes";
 import AdminNotes from "./pages/admin/AdminNotes";
+import AdminCertificate from "./pages/admin/AdminCertificate";
 
-/* ================= MAIN LAYOUT ================= */
+/* ================= MAIN LAYOUT (public pages) ================= */
 const MainLayout = () => {
+  const location = useLocation();
+
+  // List of auth paths – Navbar will be hidden on these
+  const authPaths = [
+    "/login",
+    "/signup",
+    "/verify",
+    "/forgot-password",
+    "/auth-success",
+    "/verify-otp",
+    "/change-password",
+  ];
+
+  const hideNavbar = authPaths.some((path) => location.pathname.startsWith(path));
+
   return (
     <>
-      <Navbar />
-      <main className="pt-14 min-h-screen">
+      {!hideNavbar && <Navbar />}
+      <main className={`min-h-screen ${!hideNavbar ? "" : ""}`}>
         <Outlet />
       </main>
     </>
@@ -62,11 +79,9 @@ const UserLayout = () => {
   return (
     <div className="min-h-screen bg-zinc-100">
       <Navbar />
-
-      <div className="flex pt-14">
+      <div className="flex">
         <UserSidebar />
-
-        <main className="flex-1 min-h-screen overflow-y-auto">
+        <main className="flex-1 min-h-screen">
           <Outlet />
         </main>
       </div>
@@ -79,10 +94,8 @@ const AdminLayout = () => {
   return (
     <div className="min-h-screen bg-zinc-100">
       <Navbar />
-
-      <div className="flex pt-14">
+      <div className="flex">
         <AdminSidebar />
-
         <main className="flex-1 min-h-screen overflow-y-auto p-4 sm:p-6">
           <Outlet />
         </main>
@@ -93,7 +106,7 @@ const AdminLayout = () => {
 
 /* ================= ROUTER ================= */
 const router = createBrowserRouter([
-  /* ================= PUBLIC ================= */
+  /* ================= PUBLIC ROUTES ================= */
   {
     element: <MainLayout />,
     children: [
@@ -106,10 +119,9 @@ const router = createBrowserRouter([
       { path: "/forgot-password", element: <ForgotPassword /> },
       { path: "/verify-otp/:email", element: <VerifyOTP /> },
       { path: "/change-password/:email", element: <ChangePassword /> },
+      { path: "/about", element: <About /> },
       { path: "*", element: <NotFound /> },
-        // ✅ ABOUT PAGE ADDED
-  { path: "/about", element: <About /> },
-    ]
+    ],
   },
 
   /* ================= USER ROUTES ================= */
@@ -129,13 +141,8 @@ const router = createBrowserRouter([
       { path: "guide", element: <LMSGuide /> },
       { path: "apply-refund", element: <RefundRequest /> },
       { path: "certificate", element: <ApplyCertificate /> },
-
-
-
-
-      // ✅ VIDEO PAGE FIXED HERE
-      { path: "video", element: <Video /> }
-    ]
+      { path: "video", element: <Video /> },
+    ],
   },
 
   /* ================= ADMIN ROUTES ================= */
@@ -148,15 +155,15 @@ const router = createBrowserRouter([
     ),
     children: [
       { index: true, element: <Navigate to="dashboard" /> },
-
       { path: "dashboard", element: <AdminDashboard /> },
       { path: "courses", element: <AdminCourses /> },
       { path: "modules", element: <AdminModules /> },
       { path: "refund", element: <AdminRefund /> },
+      { path: "certificaterequests", element: <AdminCertificate /> },
       { path: "notes", element: <AdminNotes /> },
-      { path: "users", element: <AdminUsers /> }
-    ]
-  }
+      { path: "users", element: <AdminUsers /> },
+    ],
+  },
 ]);
 
 const App = () => {
