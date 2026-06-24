@@ -498,9 +498,6 @@
 // export default Navbar
 
 
-
-
-
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, NavLink, useLocation } from 'react-router-dom';
 import {
@@ -734,10 +731,10 @@ const Navbar = () => {
         }`}
       />
 
-      {/* Mobile drawer */}
+      {/* Mobile drawer - z-[200] ensures it stays on top */}
       <div
         className={`
-          fixed inset-y-0 left-0 z-[100] lg:hidden
+          fixed inset-y-0 left-0 z-[200] lg:hidden
           w-[300px] max-w-[88vw]
           bg-white border-r border-gray-200
           flex flex-col
