@@ -731,7 +731,7 @@ const Navbar = () => {
         }`}
       />
 
-      {/* Mobile drawer - z-[200] ensures it stays on top */}
+      {/* Mobile drawer */}
       <div
         className={`
           fixed inset-y-0 left-0 z-[200] lg:hidden
