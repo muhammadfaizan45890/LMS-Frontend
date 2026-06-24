@@ -51,7 +51,6 @@ import AdminCertificate from "./pages/admin/AdminCertificate";
 const MainLayout = () => {
   const location = useLocation();
 
-  // List of auth paths – Navbar will be hidden on these
   const authPaths = [
     "/login",
     "/signup",
@@ -67,7 +66,7 @@ const MainLayout = () => {
   return (
     <>
       {!hideNavbar && <Navbar />}
-      <main className={`min-h-screen ${!hideNavbar ? "" : ""}`}>
+      <main className={`min-h-screen ${!hideNavbar ? "pt-[62px]" : ""}`}>
         <Outlet />
       </main>
     </>
@@ -79,9 +78,9 @@ const UserLayout = () => {
   return (
     <div className="min-h-screen bg-zinc-100">
       <Navbar />
-      <div className="flex">
+      <div className="flex pt-[62px]">
         <UserSidebar />
-        <main className="flex-1 min-h-screen">
+        <main className="flex-1 min-h-screen overflow-y-auto">
           <Outlet />
         </main>
       </div>
@@ -94,7 +93,7 @@ const AdminLayout = () => {
   return (
     <div className="min-h-screen bg-zinc-100">
       <Navbar />
-      <div className="flex">
+      <div className="flex pt-[62px]">
         <AdminSidebar />
         <main className="flex-1 min-h-screen overflow-y-auto p-4 sm:p-6">
           <Outlet />
