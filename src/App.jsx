@@ -105,7 +105,6 @@ const AdminLayout = () => {
 
 /* ================= ROUTER ================= */
 const router = createBrowserRouter([
-  /* ================= PUBLIC ROUTES ================= */
   {
     element: <MainLayout />,
     children: [
@@ -122,8 +121,6 @@ const router = createBrowserRouter([
       { path: "*", element: <NotFound /> },
     ],
   },
-
-  /* ================= USER ROUTES ================= */
   {
     path: "/user",
     element: (
@@ -143,8 +140,6 @@ const router = createBrowserRouter([
       { path: "video", element: <Video /> },
     ],
   },
-
-  /* ================= ADMIN ROUTES ================= */
   {
     path: "/admin",
     element: (
