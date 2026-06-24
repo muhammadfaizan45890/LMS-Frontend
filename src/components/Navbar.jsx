@@ -737,7 +737,7 @@ const Navbar = () => {
       {/* Mobile drawer */}
       <div
         className={`
-          fixed inset-y-0 left-0 z-[200] lg:hidden
+          fixed inset-y-0 left-0 z-[100] lg:hidden
           w-[300px] max-w-[88vw]
           bg-white border-r border-gray-200
           flex flex-col
